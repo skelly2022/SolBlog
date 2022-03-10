@@ -57,7 +57,7 @@ function TacticSession({ time }) {
 useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName('col')[0];
-      setChessboardSize(display.offsetWidth * 0.6);
+      setChessboardSize(display.width);
     }
 
     window.addEventListener('resize', handleResize);
