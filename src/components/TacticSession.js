@@ -58,7 +58,7 @@ function TacticSession({ time }) {
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
       if (display.scrollWidth < 960) {
-        setChessboardSize(display.scrollWidth * 0.8);
+        setChessboardSize(display.scrollWidth * 0.5);
       } else {
         setChessboardSize(display.scrollWidth * 0.6);
       }
