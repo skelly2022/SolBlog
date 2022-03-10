@@ -6,18 +6,14 @@ import {
   validateMoveOnClick,
 } from "../utils/chessTactics";
 import { Chessboard } from "react-chessboard";
-import Chess from "chess.js";
-import chessmove from "../audio/chessmove.wav";
 
-function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
+function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [fen, setFen] = useState(tactic.fen);
   const [solution, setSolution] = useState(tactic.solution);
-  const [squareStyles, setSquareStyles] = useState({});
-  const [game, setGame] = useState(new Chess(fen));
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
-  const [moveSquares, setMoveSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
+  const [piece, setPiece] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,64 +24,11 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
     }, 700);
   }, [tactic]);
 
-  function safeGameMutate(modify) {
-    setGame((g) => {
-      const update = { ...g };
-      modify(update);
-      return update;
-    });
-  }
-  const highlightSquares = (currentSquare, squaresToHighlight) => {
-    const highlightStyles = [currentSquare, ...squaresToHighlight].reduce(
-      (a, c) => {
-        return {
-          ...a,
-          ...{
-            [c]: {
-              background:
-                "radial-gradient(circle, rgba(0,0,0,.1) 25%, transparent 25%)",
-              borderRadius: "50%",
-            },
-          },
-          ...squareStyling(currentSquare, squaresToHighlight),
-        };
-      },
-      {}
-    );
-
-    setSquareStyles({
-      ...squareStyles,
-      ...highlightStyles,
-    });
-  };
-
-  const squareStyling = (square, history) => {
-    const sourceSquare = history.length && history[history.length - 1].from;
-    const targetSquare = history.length && history[history.length - 1].to;
-
-    return {
-      [square]: { backgroundColor: "rgba(255, 255, 0, 0.4)" },
-      ...(history.length && {
-        [sourceSquare]: {
-          backgroundColor: "rgba(255, 255, 0, 0.4)",
-        },
-      }),
-      ...(history.length && {
-        [targetSquare]: {
-          backgroundColor: "rgba(255, 255, 0, 0.4)",
-        },
-      }),
-    };
-  };
-
-  const removeHighlight = (square) => {
-    setSquareStyles(squareStyling(square, []));
-  };
-
   function getMoveOptions(square) {
+    if (optionSquares !== {}) {
+      setOptionSquares({});
+    }
     const moves = getPossibleMoves(fen, square);
-
-    console.log(moves);
 
     if (moves.length === 0) {
       return;
@@ -93,7 +36,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
 
     const newSquares = {};
     moves.map((move) => {
-      console.log(game.get(move.to));
       newSquares[move.to] = {
         background:
           "radial-gradient(circle, rgba(0,0,0,.1) 25%, transparent 25%)",
@@ -118,14 +60,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
   }*/
 
   function onSquareClick(square) {
-    let moves = getPossibleMoves(fen, square);
-
-    let squaresToHighlight = [];
-    for (var i = 0; i < moves.length; i++) {
-      squaresToHighlight.push(moves[i].to);
-    }
-
-    highlightSquares(square, squaresToHighlight);
+    const currentPiece = piece.substring(1);
+    const currentMove = `${currentPiece}${square}`;
 
     setRightClickedSquares({});
 
@@ -169,13 +105,16 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
       } else {
         onSolve();
       }
-    } else if (data.from && data.from !== data.to) {
+    } else if (data.from !== data.to && currentMove !== solution[0]) {
       onIncorrect();
+      setMoveFrom("");
+      setOptionSquares({});
     }
 
     // if invalid, setMoveFrom and getMoveOptions
     if (next === null) {
-      resetFirstMove(square);
+      setMoveFrom("");
+      setOptionSquares({});
       return;
     }
 
@@ -196,25 +135,15 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
     });
   }
 
-  function onDrop(sourceSquare, targetSquare) {
-    let move = null;
-    safeGameMutate((game) => {
-      move = game.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: "q", // always promote to a queen for example simplicity
-      });
-    });
-    if (move === null) return false; // illegal move
-    //setTimeout(makeRandomMove, 200);
-    return true;
-  }
-
   return (
     <Chessboard
       id="tacticBoard"
       animationDuration={300}
       arePiecesDraggable={false}
+      boardWidth={boardWidth}
+      onPieceClick={(piece) => {
+        setPiece(piece);
+      }}
       boardOrientation={
         getSideToPlayFromFen(tactic.fen) === "b" ? "white" : "black"
       }
@@ -226,7 +155,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect }) {
         boxShadow: "0 5px 15px rgba(0, 0, 0, 0.5)",
       }}
       customSquareStyles={{
-        ...moveSquares,
         ...optionSquares,
         ...rightClickedSquares,
       }}
