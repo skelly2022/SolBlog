@@ -61,7 +61,7 @@ function TacticSession({ time }) {
 
     window.addEventListener("resize", handleResize);
     handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListen("resize", handleResize);
     }
   }, []);
 
