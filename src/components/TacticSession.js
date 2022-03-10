@@ -57,12 +57,12 @@ function TacticSession({ time }) {
   useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
-      
-  setChessboardSize(display.scrollWidth * 0.6);
+        setChessboardSize(display.scrollWidth.6);
 
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   return (
