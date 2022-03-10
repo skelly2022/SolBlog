@@ -54,15 +54,15 @@ function TacticSession({ time }) {
   const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
-  useEffect(() => {
+useEffect(() => {
     function handleResize() {
-      const display = document.getElementsByClassName("col")[0];
-        setChessboardSize(display.scrollWidth * .6);
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListen("resize", handleResize);
+      const display = document.getElementsByClassName('col')[0];
+      setChessboardSize(display.offsetWidth * 0.6);
     }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
