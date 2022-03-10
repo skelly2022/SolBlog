@@ -76,6 +76,7 @@ function TacticSession({ time }) {
         alignItems: "center",
         justifyContent: "center",
         padding: "30px",
+        flexDirection: "column-reverse"
       }}
     >
       <Col>
