@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Modal, Button, Col } from "react-bootstrap";
+import Countdown from "react-countdown";
 import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
@@ -43,16 +44,20 @@ const TACTICS = [
   },
 ];
 
-function TacticSession() {
+function TacticSession({ time }) {
   const [chessboardSize, setChessboardSize] = useState(undefined);
+  const [score, SetScore] = useState(0);
   const [tactics, setTactics] = useState([TACTICS[0]]);
   const [key, setKey] = useState(Date.now());
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
   useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("container")[0];
-      setChessboardSize(display.offsetWidth * 0.4);
+      setChessboardSize(display.offsetWidth * 0.5);
     }
 
     window.addEventListener("resize", handleResize);
@@ -61,31 +66,64 @@ function TacticSession() {
   }, []);
 
   return (
-    <Container>
-      <TacticBoard
-        key={key}
-        tactic={tactic}
-        boardWidth={chessboardSize}
-        onCorrect={() => {
-          let audio = new Audio(chessmove);
-          audio.play();
-          console.log("Correct");
-        }}
-        onIncorrect={() => {
-          let audio = new Audio(wrongmove);
-          audio.play();
-          console.log("Incorrect");
-        }}
-        onSolve={() => {
-          let audio = new Audio(solve);
-          audio.play();
-          console.log("Solved");
-          const nextTactic =
-            TACTICS[Math.floor(Math.random() * TACTICS.length)];
-          setTactics(tactics.slice(1).concat(nextTactic));
-          setKey(Date.now());
-        }}
-      />
+    <Container
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "30px",
+      }}
+    >
+      <Col>
+        <TacticBoard
+          key={key}
+          tactic={tactic}
+          boardWidth={chessboardSize}
+          onCorrect={() => {
+            let audio = new Audio(chessmove);
+            audio.play();
+          }}
+          onIncorrect={() => {
+            let audio = new Audio(wrongmove);
+            audio.play();
+            handleShow();
+          }}
+          onSolve={() => {
+            let audio = new Audio(solve);
+            audio.play();
+            SetScore(score + 1);
+            const nextTactic =
+              TACTICS[Math.floor(Math.random() * TACTICS.length)];
+            setTactics(tactics.slice(1).concat(nextTactic));
+            setKey(Date.now());
+          }}
+        />
+      </Col>
+      <Col>
+        <Countdown date={Date.now() + time} />
+      </Col>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title style={{ margin: "auto", fontSize: "2.5rem" }}>
+            Game Over!
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>Score: {score}</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }
