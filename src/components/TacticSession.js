@@ -57,12 +57,8 @@ function TacticSession({ time }) {
   useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
-      if (display.scrollWidth < 960) {
-        setChessboardSize(display.scrollWidth * 0.8);
-      } else {
-        setChessboardSize(display.scrollWidth * 0.6);
-      }
-    }
+      
+  setChessboardSize(display.scrollWidth * 0.6);
 
     window.addEventListener("resize", handleResize);
     handleResize();
