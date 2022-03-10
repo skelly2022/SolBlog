@@ -57,7 +57,11 @@ function TacticSession({ time }) {
   useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("container")[0];
-      setChessboardSize(display.offsetWidth * 0.5);
+      if (display.scrollWidth < 960) {
+        setChessboardSize(display.scrollWidth * 0.8);
+      } else {
+        setChessboardSize(display.scrollWidth * 0.6);
+      }
     }
 
     window.addEventListener("resize", handleResize);
@@ -100,7 +104,29 @@ function TacticSession({ time }) {
         />
       </Col>
       <Col>
-        <Countdown date={Date.now() + time} />
+        <Countdown key={0} className="counter" date={Date.now() + time}>
+          <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+            centered
+          >
+            <Modal.Header>
+              <Modal.Title style={{ margin: "auto", fontSize: "2.5rem" }}>
+                Game Over!
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h2>Score: {score}</h2>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Countdown>
       </Col>
 
       <Modal
