@@ -86,6 +86,9 @@ function TacticSession({ time }) {
           onCorrect={() => {
             let audio = new Audio(chessmove);
             audio.play();
+            setTimeout(() => {
+              audio.pause();
+            }, 300);
           }}
           onIncorrect={() => {
             let audio = new Audio(wrongmove);
