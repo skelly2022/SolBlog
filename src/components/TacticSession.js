@@ -45,7 +45,7 @@ const TACTICS = [
   },
 ];
 
-function TacticSession({ time }) {
+function TacticSession() {
   const [chessboardSize, setChessboardSize] = useState(undefined);
   const [score, SetScore] = useState(0);
   const [tactics, setTactics] = useState([TACTICS[0]]);
@@ -55,7 +55,16 @@ function TacticSession({ time }) {
   const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
+  const getPuzzle = () => {
+    const initData = axios("https://chess-puzzle-server.herokuapp.com/").then(
+      (data) => {
+        return data.data.data;
+      }
+    );
+  };
+
   useEffect(() => {
+    getPuzzle();
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
       const displayDiv = display.getElementsByTagName("div")[0];
@@ -65,8 +74,6 @@ function TacticSession({ time }) {
         "style",
         "position: relative;,display: flex;, align-items: center;, justify-content: center;"
       );
-
-      console.log(display.offsetWidth);
 
       if (display.offsetWidth > 900) {
         setChessboardSize(display.offsetWidth - 350);

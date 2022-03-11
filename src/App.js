@@ -7,7 +7,7 @@ function App() {
     <Routes>
       <>
         <Route path="/" element={<TacticMenu />} />
-        <Route path="/beginner" element={<TacticSession time={180000} />} />
+        <Route path="/beginner" element={<TacticSession />} />
       </>
     </Routes>
   );
