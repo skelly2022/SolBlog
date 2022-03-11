@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container, Modal, Button, Col } from "react-bootstrap";
-import Countdown from "react-countdown";
+import { Container, Modal, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
@@ -54,15 +54,30 @@ function TacticSession({ time }) {
   const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
-useEffect(() => {
+  useEffect(() => {
     function handleResize() {
-      const display = document.getElementsByClassName('col')[0];
-      setChessboardSize(display.width);
+      const display = document.getElementsByClassName("col")[0];
+      console.log(display.offsetWidth);
+      if (display.offsetWidth > 900) {
+        setChessboardSize(display.offsetWidth * 0.6);
+      }
+
+      if (display.offsetWidth <= 900) {
+        setChessboardSize(display.offsetWidth * 0.7);
+      }
+
+      if (display.offsetWidth <= 660) {
+        setChessboardSize(display.offsetWidth);
+      }
+
+      if (display.offsetWidth <= 480) {
+        setChessboardSize(display.offsetWidth * 1);
+      }
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -72,7 +87,6 @@ useEffect(() => {
         alignItems: "center",
         justifyContent: "center",
         padding: "30px",
-        flexDirection: "column-reverse"
       }}
     >
       <Col>
@@ -90,11 +104,17 @@ useEffect(() => {
           onIncorrect={() => {
             let audio = new Audio(wrongmove);
             audio.play();
+            setTimeout(() => {
+              audio.pause();
+            }, 300);
             handleShow();
           }}
           onSolve={() => {
             let audio = new Audio(solve);
             audio.play();
+            setTimeout(() => {
+              audio.pause();
+            }, 700);
             SetScore(score + 1);
             const nextTactic =
               TACTICS[Math.floor(Math.random() * TACTICS.length)];
@@ -102,31 +122,6 @@ useEffect(() => {
             setKey(Date.now());
           }}
         />
-      </Col>
-      <Col>
-        <Countdown key={0} className="counter" date={Date.now() + time}>
-          <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-            centered
-          >
-            <Modal.Header>
-              <Modal.Title style={{ margin: "auto", fontSize: "2.5rem" }}>
-                Game Over!
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <h2>Score: {score}</h2>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </Countdown>
       </Col>
 
       <Modal
@@ -145,9 +140,9 @@ useEffect(() => {
           <h2>Score: {score}</h2>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
+          <Link className="btn btn-primary" to="/">
+            Return to menu
+          </Link>
         </Modal.Footer>
       </Modal>
     </Container>
