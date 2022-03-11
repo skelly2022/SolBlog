@@ -57,21 +57,30 @@ function TacticSession({ time }) {
   useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
+      const displayDiv = display.getElementsByTagName("div")[0];
+      const chessBoardContainer = displayDiv.getElementsByTagName("div")[0];
+
+      chessBoardContainer.setAttribute(
+        "style",
+        "position: relative;,display: flex;, align-items: center;, justify-content: center;"
+      );
+
       console.log(display.offsetWidth);
+
       if (display.offsetWidth > 900) {
-        setChessboardSize(display.offsetWidth * 0.6);
+        setChessboardSize(display.offsetWidth - 350);
       }
 
       if (display.offsetWidth <= 900) {
-        setChessboardSize(display.offsetWidth * 0.7);
+        setChessboardSize(display.offsetWidth - 30);
       }
 
       if (display.offsetWidth <= 660) {
-        setChessboardSize(display.offsetWidth);
+        setChessboardSize(display.offsetWidth - 40);
       }
 
       if (display.offsetWidth <= 480) {
-        setChessboardSize(display.offsetWidth * 1);
+        setChessboardSize(display.offsetWidth + 10);
       }
     }
 
@@ -89,11 +98,18 @@ function TacticSession({ time }) {
         padding: "30px",
       }}
     >
-      <Col>
+      <Col
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <TacticBoard
           key={key}
           tactic={tactic}
           boardWidth={chessboardSize}
+          boardHeight
           onCorrect={() => {
             let audio = new Audio(chessmove);
             audio.play();
