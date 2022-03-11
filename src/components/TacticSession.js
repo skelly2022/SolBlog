@@ -115,14 +115,14 @@ function TacticSession({ time }) {
             audio.play();
             setTimeout(() => {
               audio.pause();
-            }, 300);
+            }, 700);
           }}
           onIncorrect={() => {
             let audio = new Audio(wrongmove);
             audio.play();
             setTimeout(() => {
               audio.pause();
-            }, 300);
+            }, 700);
             handleShow();
           }}
           onSolve={() => {
