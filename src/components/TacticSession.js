@@ -5,7 +5,7 @@ import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
 import wrongmove from "../audio/incorrect move.wav";
-import axios from "axios";
+//import axios from "axios";
 
 const TACTICS = [
   {
@@ -55,16 +55,15 @@ function TacticSession() {
   const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
-  const getPuzzle = () => {
+  /*const getPuzzle = () => {
     const initData = axios("https://chess-puzzle-server.herokuapp.com/").then(
       (data) => {
         return data.data.data;
       }
     );
-  };
+  };*/
 
   useEffect(() => {
-    getPuzzle();
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
       const displayDiv = display.getElementsByTagName("div")[0];
