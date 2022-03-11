@@ -54,19 +54,15 @@ function TacticSession({ time }) {
   const handleShow = () => setShow(true);
   const tactic = tactics[0];
 
-  useEffect(() => {
+useEffect(() => {
     function handleResize() {
-      const display = document.getElementsByClassName("container")[0];
-      if (display.scrollWidth < 960) {
-        setChessboardSize(display.scrollWidth * 0.8);
-      } else {
-        setChessboardSize(display.scrollWidth * 0.6);
-      }
+      const display = document.getElementsByClassName('col')[0];
+      setChessboardSize(display.width);
     }
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -76,6 +72,7 @@ function TacticSession({ time }) {
         alignItems: "center",
         justifyContent: "center",
         padding: "30px",
+        flexDirection: "column-reverse"
       }}
     >
       <Col>
