@@ -5,6 +5,7 @@ import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
 import wrongmove from "../audio/incorrect move.wav";
+import axios from "axios";
 
 const TACTICS = [
   {
