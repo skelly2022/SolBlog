@@ -6,6 +6,7 @@ import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
 import wrongmove from "../audio/incorrect move.wav";
 import axios from "axios";
+import { PuzzleProvider } from "../utils/PuzzleContext";
 
 function TacticSession() {
   const [chessboardSize, setChessboardSize] = useState(undefined);
@@ -16,18 +17,34 @@ function TacticSession() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const getPuzzle = async () => {
-    const initData = await axios(
-      "https://chess-puzzle-server.herokuapp.com/"
-    ).then((data) => {
-      return data.data;
-    });
+  async function getPuzzle() {
+    let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
+      (data) => {
+        const payload = data.data;
 
-    setTactic(initData);
-  };
+        return payload;
+      }
+    );
+
+    setTactic(data);
+  }
 
   useEffect(() => {
-    getPuzzle();
+    async function getAPuzzle() {
+      let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
+        (data) => {
+          const payload = data.data;
+
+          return payload;
+        }
+      );
+
+      setTactic(data);
+    }
+    getAPuzzle();
+  }, []);
+
+  useEffect(() => {
     function handleResize() {
       const display = document.getElementsByClassName("col")[0];
       const displayDiv = display.getElementsByTagName("div")[0];
@@ -60,7 +77,6 @@ function TacticSession() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(tactic);
   return (
     <Container
       style={{
@@ -77,37 +93,42 @@ function TacticSession() {
           justifyContent: "center",
         }}
       >
-        <TacticBoard
-          key={key}
-          tactic={tactic}
-          boardWidth={chessboardSize}
-          boardHeight
-          onCorrect={() => {
-            let audio = new Audio(chessmove);
-            audio.play();
-            setTimeout(() => {
-              audio.pause();
-            }, 700);
-          }}
-          onIncorrect={() => {
-            let audio = new Audio(wrongmove);
-            audio.play();
-            setTimeout(() => {
-              audio.pause();
-            }, 700);
-            handleShow();
-          }}
-          onSolve={() => {
-            let audio = new Audio(solve);
-            audio.play();
-            setTimeout(() => {
-              audio.pause();
-            }, 700);
-            SetScore(score + 1);
-            getPuzzle();
-            setKey(Date.now());
-          }}
-        />
+        <PuzzleProvider>
+          <TacticBoard
+            key={key}
+            tactic={tactic}
+            boardWidth={chessboardSize}
+            boardHeight
+            onCorrect={() => {
+              let audio = new Audio(chessmove);
+              audio.play();
+              setTimeout(() => {
+                audio.pause();
+              }, 700);
+            }}
+            onIncorrect={() => {
+              let audio = new Audio(wrongmove);
+              audio.play();
+              setTimeout(() => {
+                audio.pause();
+              }, 700);
+              handleShow();
+            }}
+            onSolve={() => {
+              let audio = new Audio(solve);
+              audio.play();
+              setTimeout(() => {
+                audio.pause();
+              }, 700);
+              SetScore(score + 1);
+              setTimeout(() => {
+                getPuzzle();
+              }, 1000);
+
+              setKey(Date.now());
+            }}
+          />
+        </PuzzleProvider>
       </Col>
 
       <Modal

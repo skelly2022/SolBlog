@@ -9,20 +9,23 @@ import { Chessboard } from "react-chessboard";
 
 function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [fen, setFen] = useState(tactic.fen);
-  const [solution, setSolution] = useState(tactic.solution);
+  const [solution, setSolution] = useState([]);
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
   const [piece, setPiece] = useState("");
 
   useEffect(() => {
+    setSolution(tactic.solution);
     setTimeout(() => {
       const next = makeMove(tactic.fen, tactic.blunderMove);
       if (next) {
         setFen(next.fen);
       }
     }, 700);
-  }, [tactic]);
+  }, [tactic.blunderMove, tactic.fen, tactic.solution]);
+
+  console.log(solution);
 
   function getMoveOptions(square) {
     if (optionSquares !== {}) {
@@ -84,9 +87,9 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
     };
 
     const next = validateMoveOnClick(fen, data, solution);
+
     if (next) {
       setFen(next.fen);
-
       setSolution(next.solution);
 
       if (next.solution.length > 0) {
@@ -103,6 +106,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
           setSolution(autoNext.solution);
         }
       } else {
+        setFen("");
+
         onSolve();
       }
     } else if (data.from !== data.to && currentMove !== solution[0]) {
