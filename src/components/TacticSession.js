@@ -30,7 +30,7 @@ function TacticSession() {
   }
 
   useEffect(() => {
-    if(!tactic){
+    if(tactic === {}){
   async function getAPuzzle() {
       let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
         (data) => {
