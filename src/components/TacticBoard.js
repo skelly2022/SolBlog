@@ -16,6 +16,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [piece, setPiece] = useState("");
 
   useEffect(() => {
+    setFen(tactic.fen)
     setSolution(tactic.solution);
     setTimeout(() => {
       const next = makeMove(tactic.fen, tactic.blunderMove);
@@ -23,7 +24,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
         setFen(next.fen);
       }
     }, 700);
-  }, [tactic.blunderMove, tactic.fen, tactic.solution]);
+  }, [tactic]);
 
   console.log(solution);
 
