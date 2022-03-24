@@ -44,7 +44,7 @@ function TacticSession() {
     }
     getAPuzzle();
     
-  }, [tactic]);
+  }, []);
 
   useEffect(() => {
     function handleResize() {
