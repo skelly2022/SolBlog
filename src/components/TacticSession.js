@@ -30,8 +30,7 @@ function TacticSession() {
   }
 
   useEffect(() => {
-
-  async function getAPuzzle() {
+    async function getAPuzzle() {
       let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
         (data) => {
           const payload = data.data;
@@ -43,7 +42,6 @@ function TacticSession() {
       setTactic(data);
     }
     getAPuzzle();
-    
   }, []);
 
   useEffect(() => {
@@ -123,9 +121,8 @@ function TacticSession() {
                 audio.pause();
               }, 700);
               SetScore(score + 1);
-              setTimeout(() => {
-                getPuzzle();
-              }, 1000);
+
+              getPuzzle();
 
               setKey(Date.now());
             }}
