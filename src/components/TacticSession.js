@@ -135,6 +135,7 @@ function TacticSession() {
         <Col>
           <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
           <div style={{ textAlign: "center" }}>
+            <h3>Score: {score}</h3>
             <h2>
               {getSideToPlayFromFen(tactic.fen) === "b"
                 ? "White to Play"
