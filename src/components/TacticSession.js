@@ -106,14 +106,14 @@ function TacticSession() {
               audio.play();
               setTimeout(() => {
                 audio.pause();
-              }, 700);
+              }, 1000);
             }}
             onIncorrect={() => {
               let audio = new Audio(wrongmove);
               audio.play();
               setTimeout(() => {
                 audio.pause();
-              }, 700);
+              }, 1000);
               handleShow();
               setIsGameOver(true);
             }}
@@ -122,7 +122,7 @@ function TacticSession() {
               audio.play();
               setTimeout(() => {
                 audio.pause();
-              }, 700);
+              }, 1000);
               SetScore(score + 1);
               await getPuzzle();
               setKey(Date.now());
