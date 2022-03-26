@@ -25,8 +25,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
     }, 700);
   }, [tactic]);
 
-  console.log(solution);
-
   function getMoveOptions(square) {
     if (optionSquares !== {}) {
       setOptionSquares({});
@@ -90,6 +88,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
 
     if (next) {
       setFen(next.fen);
+
       setSolution(next.solution);
 
       if (next.solution.length > 0) {
@@ -106,9 +105,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
           setSolution(autoNext.solution);
         }
       } else {
-        setInterval(() => {
-          setFen("");
-        }, 1000);
         onSolve();
       }
     } else if (data.from !== data.to && currentMove !== solution[0]) {
@@ -144,7 +140,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   return (
     <Chessboard
       id="tacticBoard"
-      animationDuration={200}
+      animationDuration={300}
       arePiecesDraggable={false}
       boardWidth={boardWidth}
       onPieceClick={(piece) => {
