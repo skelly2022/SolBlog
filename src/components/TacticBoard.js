@@ -15,7 +15,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
-  const [inCheck, setInCheck] = useState(false);
+  //const [inCheck, setInCheck] = useState(false);
 
   useEffect(() => {
     setSolution(tactic.solution);
