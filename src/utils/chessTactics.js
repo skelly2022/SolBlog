@@ -10,6 +10,19 @@ export function getPossibleMoves(fen, square) {
   return moves;
 }
 
+export function playerInCheck(fen) {
+  const chess = new Chess(fen);
+  let inCheck = chess.in_check();
+
+  return inCheck;
+}
+
+export function getMoveOnClick(fen, data) {
+  const next = moveOnCLick(fen, data);
+
+  return next ? next.moves.san : null;
+}
+
 export function getSideToPlayFromFen(fen) {
   const chess = new Chess(fen);
   return chess.turn();

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { Container, Modal, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TacticBoard from "./TacticBoard";
@@ -32,18 +33,7 @@ function TacticSession() {
   }
 
   useEffect(() => {
-    async function getAPuzzle() {
-      let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
-        (data) => {
-          const payload = data.data;
-
-          return payload;
-        }
-      );
-
-      setTactic(data);
-    }
-    getAPuzzle();
+    getPuzzle();
   }, []);
 
   useEffect(() => {
@@ -58,7 +48,7 @@ function TacticSession() {
       );
 
       if (display.offsetWidth >= 1140) {
-        setChessboardSize(display.offsetWidth * 0.45);
+        setChessboardSize(display.offsetWidth * 0.53);
       }
 
       if (display.offsetWidth >= 960 && display.offsetWidth < 1140) {
@@ -79,6 +69,17 @@ function TacticSession() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  async function solutionFunction() {
+    let audio = new Audio(solve);
+    audio.play();
+    setTimeout(() => {
+      audio.pause();
+    }, 1000);
+    SetScore(score + 1);
+    await getPuzzle();
+    setKey(Date.now());
+  }
+
   return (
     <Container
       style={{
@@ -89,7 +90,7 @@ function TacticSession() {
         flexDirection: "column-reverse",
       }}
     >
-      <Col>
+      <Col className="chessBody">
         <Container
           style={{
             display: "flex",
@@ -117,22 +118,13 @@ function TacticSession() {
               handleShow();
               setIsGameOver(true);
             }}
-            onSolve={async () => {
-              let audio = new Audio(solve);
-              audio.play();
-              setTimeout(() => {
-                audio.pause();
-              }, 1000);
-              SetScore(score + 1);
-              await getPuzzle();
-              setKey(Date.now());
-            }}
+            onSolve={solutionFunction}
           />
         </Container>
       </Col>
 
       {!isGameOver && (
-        <Col>
+        <Col className="chessHeader">
           <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
           <div style={{ textAlign: "center" }}>
             <h3>Score: {score}</h3>

@@ -4,6 +4,8 @@ import {
   makeMove,
   getPossibleMoves,
   validateMoveOnClick,
+  getMoveOnClick,
+  playerInCheck,
 } from "../utils/chessTactics";
 import { Chessboard } from "react-chessboard";
 
@@ -13,7 +15,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
-  const [piece, setPiece] = useState("");
+  const [inCheck, setInCheck] = useState(false);
 
   useEffect(() => {
     setSolution(tactic.solution);
@@ -21,6 +23,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
       const next = makeMove(tactic.fen, tactic.blunderMove);
       if (next) {
         setFen(next.fen);
+        console.log(playerInCheck(next.fen));
       }
     }, 700);
   }, [tactic]);
@@ -61,8 +64,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   }*/
 
   function onSquareClick(square) {
-    const currentPiece = piece.substring(1);
-    const currentMove = `${currentPiece}${square}`;
+    let currentMove;
 
     setRightClickedSquares({});
 
@@ -84,11 +86,12 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
       promotion: "q",
     };
 
+    currentMove = getMoveOnClick(fen, data);
+
     const next = validateMoveOnClick(fen, data, solution);
 
     if (next) {
       setFen(next.fen);
-
       setSolution(next.solution);
 
       if (next.solution.length > 0) {
@@ -101,13 +104,15 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
         );
 
         if (autoNext) {
-          setFen(autoNext.fen);
-          setSolution(autoNext.solution);
+          setTimeout(() => {
+            setFen(autoNext.fen);
+            setSolution(autoNext.solution);
+          }, 500);
         }
       } else {
         onSolve();
       }
-    } else if (data.from !== data.to && currentMove !== solution[0]) {
+    } else if (currentMove && currentMove !== solution[0]) {
       onIncorrect();
       setMoveFrom("");
       setOptionSquares({});
@@ -143,9 +148,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
       animationDuration={300}
       arePiecesDraggable={false}
       boardWidth={boardWidth}
-      onPieceClick={(piece) => {
-        setPiece(piece);
-      }}
       boardOrientation={
         getSideToPlayFromFen(tactic.fen) === "b" ? "white" : "black"
       }
