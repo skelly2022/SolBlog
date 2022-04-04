@@ -48,19 +48,19 @@ function TacticSession() {
       );
 
       if (display.offsetWidth >= 1140) {
-        setChessboardSize(display.offsetWidth * 0.53);
+        setChessboardSize(display.offsetWidth * 0.65);
       }
 
       if (display.offsetWidth >= 960 && display.offsetWidth < 1140) {
-        setChessboardSize(display.offsetWidth * 0.55);
-      }
-
-      if (display.offsetWidth >= 720 && display.offsetWidth < 960) {
         setChessboardSize(display.offsetWidth * 0.75);
       }
 
+      if (display.offsetWidth >= 720 && display.offsetWidth < 960) {
+        setChessboardSize(display.offsetWidth * 0.85);
+      }
+
       if (display.offsetWidth <= 540) {
-        setChessboardSize(display.offsetWidth * 0.9);
+        setChessboardSize(display.offsetWidth * 0.95);
       }
     }
 
@@ -127,12 +127,12 @@ function TacticSession() {
         <Col className="chessHeader">
           <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
           <div style={{ textAlign: "center" }}>
-            <h3>Score: {score}</h3>
-            <h2>
+            <span>Score: {score}</span>
+            <span>
               {getSideToPlayFromFen(tactic.fen) === "b"
                 ? "White to Play"
                 : "Black to Play"}
-            </h2>
+            </span>
           </div>
         </Col>
       )}
