@@ -18,6 +18,11 @@ code {
     monospace;
 }
 
+#root{
+  height: 100%;
+  background-color: rgb(26, 24, 24);
+}
+
 .counter {
   font-size: 2rem;
 }
@@ -28,8 +33,56 @@ code {
   justify-content: space-between;
   flex: .1;
   width: 50% !important;
+  flex-direction: column;
 }
 
 .chessBody{
   flex: 1;
+}
+
+.chessContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 100%;
+}
+
+.cardShadow{
+  box-shadow: 0 0.125rem 0.85rem  rgb(233, 230, 230);
+}
+
+@media (max-width: 768px){
+  .mainContainer{
+    flex-direction: column-reverse;
+  }
+
+  .list-group{
+    flex-direction: row !important;
+  }
+
+  .list-group-item{
+    padding: 3px !important;
+  }
+}
+
+@media (max-width: 576px){
+  .mainContainer{
+    flex-direction: column-reverse;
+  }
+
+  .list-group{
+    flex-direction: row !important;
+  }
+
+  
+  .list-group-item{
+    padding: 3px !important;
+  }
 }

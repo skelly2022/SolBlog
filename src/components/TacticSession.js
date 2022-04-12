@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Container, Modal, Col } from "react-bootstrap";
+import { Container, Modal, Col, Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
@@ -48,19 +48,19 @@ function TacticSession() {
       );
 
       if (display.offsetWidth >= 1140) {
-        setChessboardSize(display.offsetWidth * 0.53);
+        setChessboardSize(display.offsetWidth * 0.59);
       }
 
       if (display.offsetWidth >= 960 && display.offsetWidth < 1140) {
-        setChessboardSize(display.offsetWidth * 0.55);
+        setChessboardSize(display.offsetWidth * 0.69);
       }
 
       if (display.offsetWidth >= 720 && display.offsetWidth < 960) {
-        setChessboardSize(display.offsetWidth * 0.75);
+        setChessboardSize(display.offsetWidth * 0.82);
       }
 
       if (display.offsetWidth <= 540) {
-        setChessboardSize(display.offsetWidth * 0.9);
+        setChessboardSize(display.offsetWidth);
       }
     }
 
@@ -81,23 +81,9 @@ function TacticSession() {
   }
 
   return (
-    <Container
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "30px",
-        flexDirection: "column-reverse",
-      }}
-    >
+    <Container className="mainContainer">
       <Col className="chessBody">
-        <Container
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <Container className="chessContainer">
           <TacticBoard
             key={key}
             tactic={tactic}
@@ -125,15 +111,23 @@ function TacticSession() {
 
       {!isGameOver && (
         <Col className="chessHeader">
-          <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
-          <div style={{ textAlign: "center" }}>
-            <h3>Score: {score}</h3>
-            <h2>
-              {getSideToPlayFromFen(tactic.fen) === "b"
-                ? "White to Play"
-                : "Black to Play"}
-            </h2>
-          </div>
+          <Card className="cardShadow">
+            <ListGroup>
+              <ListGroup.Item>
+                <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <div style={{ textAlign: "center" }}>
+                  <h2>Score: {score}</h2>
+                  <h4>
+                    {getSideToPlayFromFen(tactic.fen) === "b"
+                      ? "White to Play"
+                      : "Black to Play"}
+                  </h4>
+                </div>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
         </Col>
       )}
 
