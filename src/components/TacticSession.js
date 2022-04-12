@@ -59,6 +59,10 @@ function TacticSession() {
         setChessboardSize(display.offsetWidth * 0.82);
       }
 
+      if (display.offsetWidth >= 720 && display.offsetWidth < 960) {
+        setChessboardSize(display.offsetWidth * 0.85);
+      }
+
       if (display.offsetWidth <= 540) {
         setChessboardSize(display.offsetWidth);
       }

@@ -29,9 +29,9 @@ function Timer({ time }) {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h2>{`${mins.toString().padStart(2, "0")}:${secs
+      <span>{`${mins.toString().padStart(2, "0")}:${secs
         .toString()
-        .padStart(2, "0")}`}</h2>
+        .padStart(2, "0")}`}</span>
     </div>
   );
 }
