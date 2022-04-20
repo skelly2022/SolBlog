@@ -5,7 +5,7 @@ import {
   getPossibleMoves,
   validateMoveOnClick,
   getMoveOnClick,
-  playerInCheck,
+  //playerInCheck,
 } from "../utils/chessTactics";
 import { Chessboard } from "react-chessboard";
 
