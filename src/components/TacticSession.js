@@ -80,17 +80,33 @@ function TacticSession() {
     }
   }, [loading]);
 
-  console.log(loading);
-
   async function solutionFunction() {
     let audio = new Audio(solve);
     audio.play();
     setTimeout(() => {
       audio.pause();
-    }, 1000);
+    }, 800);
     SetScore(score + 1);
     await getPuzzle();
     setKey(Date.now());
+  }
+
+  async function correctFunction() {
+    let audio = new Audio(chessmove);
+    audio.play();
+    setTimeout(() => {
+      audio.pause();
+    }, 500);
+  }
+
+  async function incorrectFunction() {
+    let audio = new Audio(wrongmove);
+    audio.play();
+    setTimeout(() => {
+      audio.pause();
+    }, 1000);
+    handleShow();
+    setIsGameOver(true);
   }
 
   return (
@@ -110,22 +126,8 @@ function TacticSession() {
                   key={key}
                   tactic={tactic}
                   boardWidth={chessboardSize}
-                  onCorrect={() => {
-                    let audio = new Audio(chessmove);
-                    audio.play();
-                    setTimeout(() => {
-                      audio.pause();
-                    }, 1000);
-                  }}
-                  onIncorrect={() => {
-                    let audio = new Audio(wrongmove);
-                    audio.play();
-                    setTimeout(() => {
-                      audio.pause();
-                    }, 1000);
-                    handleShow();
-                    setIsGameOver(true);
-                  }}
+                  onCorrect={correctFunction}
+                  onIncorrect={incorrectFunction}
                   onSolve={solutionFunction}
                 />
               </Container>

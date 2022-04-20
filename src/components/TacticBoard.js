@@ -23,7 +23,6 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
       const next = makeMove(tactic.fen, tactic.blunderMove);
       if (next) {
         setFen(next.fen);
-        console.log(playerInCheck(next.fen));
       }
     }, 700);
   }, [tactic]);
