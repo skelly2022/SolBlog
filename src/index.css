@@ -115,8 +115,8 @@ code {
 @media (max-width: 768px){
 
   .chessHeader{
-    flex-grow: 0;
-    margin-bottom: 20px;
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
   }
   .mainContainer{
     flex-direction: column-reverse;
@@ -133,8 +133,8 @@ code {
 
 @media (max-width: 576px){
   .chessHeader{
-    flex-grow: 0;
-    margin-bottom: 20px;
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
   }
   .mainContainer{
     flex-direction: column-reverse;
