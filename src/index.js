@@ -5,11 +5,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import "./bootstrap-4.3.1-dist/css/bootstrap.min.css";
+import { GameStateProvider } from "./utils/GameContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <GameStateProvider>
+        <App />
+      </GameStateProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

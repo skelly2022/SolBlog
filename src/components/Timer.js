@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useGameUpdateState } from "../utils/GameContext";
 
 function Timer({ time }) {
+  const { updateGameOver } = useGameUpdateState();
+  const { updateShow } = useGameUpdateState();
   const { hours = 0, minutes = 0, seconds = 60 } = time;
   const [[hrs, mins, secs], setTime] = React.useState([
     hours,
@@ -26,6 +29,13 @@ function Timer({ time }) {
     const timerId = setInterval(() => tick(), 1000);
     return () => clearInterval(timerId);
   });
+
+  useEffect(() => {
+    if (hrs === 0 && mins === 0 && secs === 0) {
+      updateGameOver();
+      updateShow();
+    }
+  }, [hrs, mins, secs, updateGameOver, updateShow]);
 
   return (
     <div style={{ textAlign: "center" }}>

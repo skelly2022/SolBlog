@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useGameState, useGameUpdateState } from "../utils/GameContext";
 import { Container, Modal, Col, Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TacticBoard from "./TacticBoard";
@@ -15,10 +15,11 @@ function TacticSession() {
   const [score, SetScore] = useState(0);
   const [key, setKey] = useState(Date.now());
   const [tactic, setTactic] = useState({});
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const [isGameOver, setIsGameOver] = useState(false);
+  const { show } = useGameState();
+  const { updateShow } = useGameUpdateState();
+  const { gameOver } = useGameState();
+  const { updateGameOver } = useGameUpdateState();
+  const { reset } = useGameUpdateState();
   const [loading, setLoading] = useState(true);
 
   async function getPuzzle() {
@@ -105,8 +106,8 @@ function TacticSession() {
     setTimeout(() => {
       audio.pause();
     }, 1000);
-    handleShow();
-    setIsGameOver(true);
+    updateGameOver();
+    updateShow();
   }
 
   return (
@@ -133,7 +134,7 @@ function TacticSession() {
               </Container>
             </Col>
 
-            {!isGameOver && (
+            {!gameOver && (
               <Col className="chessHeader">
                 <Card className="cardShadow">
                   <ListGroup>
@@ -157,7 +158,7 @@ function TacticSession() {
 
             <Modal
               show={show}
-              onHide={handleClose}
+              onHide={updateShow}
               backdrop="static"
               keyboard={false}
               centered
@@ -171,7 +172,7 @@ function TacticSession() {
                 <h2>Score: {score}</h2>
               </Modal.Body>
               <Modal.Footer>
-                <Link className="btn btn-primary" to="/">
+                <Link onClick={reset} className="btn btn-primary" to="/">
                   Return to menu
                 </Link>
               </Modal.Footer>
