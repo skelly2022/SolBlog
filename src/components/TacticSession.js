@@ -97,7 +97,7 @@ function TacticSession() {
     audio.play();
     setTimeout(() => {
       audio.pause();
-    }, 500);
+    }, 200);
   }
 
   async function incorrectFunction() {
