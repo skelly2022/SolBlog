@@ -10,7 +10,7 @@ import axios from "axios";
 import Timer from "./Timer";
 import { getSideToPlayFromFen } from "../utils/chessTactics";
 
-function TacticSession() {
+const TacticSession = () => {
   const [chessboardSize, setChessboardSize] = useState(undefined);
   const [score, SetScore] = useState(0);
   const [key, setKey] = useState(Date.now());
@@ -22,10 +22,41 @@ function TacticSession() {
   const { reset } = useGameUpdateState();
   const [loading, setLoading] = useState(true);
 
+
+  const [walletAddress, setWalletAddress] = useState(null);
+
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const { solana } = window;
+
+      if (solana) {
+        if (solana.isPhantom) {
+          console.log('Phantom wallet found!');
+          const response = await solana.connect({ onlyIfTrusted: true });
+          console.log(
+            'Connected with Public Key:',
+            response.publicKey.toString()
+          );
+
+          /*
+           * Set the user's publicKey in state to be used later!
+           */
+          setWalletAddress(response.publicKey.toString());
+        }
+      } else {
+        alert('Solana object not found! Get a Phantom Wallet 👻');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   async function getPuzzle() {
     let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
       (data) => {
         const payload = data.data;
+        console.log(payload);
 
         return payload;
       }
@@ -80,6 +111,14 @@ function TacticSession() {
       return () => window.removeEventListener("resize", handleResize);
     }
   }, [loading]);
+
+  useEffect(() => {
+    const onLoad = async () => {
+      await checkIfWalletIsConnected();
+    };
+    window.addEventListener('load', onLoad);
+    return () => window.removeEventListener('load', onLoad);
+  }, []);
 
   async function solutionFunction() {
     let audio = new Audio(solve);
