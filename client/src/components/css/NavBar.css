@@ -7,16 +7,15 @@
   font-size: 2rem;
 }
 
-.nav {background-color: #333;
-color:white;
+.nav {background-color: beige;
 display:flex;
-justify-content: center;
-align-items: center;
-padding: 1rem 1rem;}
+
+padding: 1rem 5rem;}
 
 
 .nav a {
   color:inherit;
+  margin-left: 10px;
   text-decoration: none;
 
 }

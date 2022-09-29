@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const QUERY_SCORES = gql`
   query getScores {
@@ -7,6 +7,13 @@ export const QUERY_SCORES = gql`
       wallet
       highScore
       createdAt
+    }
+  }
+`;
+export const QUERY_SCORE = gql`
+  query score($wallet: String!) {
+    score(wallet: $wallet) {
+      highScore
     }
   }
 `;

@@ -10,9 +10,9 @@ const scoreSchema = new Schema({
     trim: true,
   },
   highScore: {
-    type: String,
-    required: true,
-    trim: true,
+    type: Number,
+    default: 1200,
+    
   },
   createdAt: {
     type: Date,

@@ -1,4 +1,5 @@
 import TacticMenu from "./components/TacticMenu";
+import HomeMenu from "./components/HomeMenu";
 import TacticSession from "./components/TacticSession";
 // import { Routes, Route, Router  } from "react-router-dom";
 import Navbar from "./components/sub/NavBar";
@@ -15,9 +16,12 @@ function App() {
 
   switch (window.location.pathname) {
     case "/":
+      Component = HomeMenu;
+      break;
+    case "/wfeqfeqw":
       Component = TacticMenu;
       break;
-    case "/beginner":
+    case "/play":
       Component = TacticSession;
       break;
   }
@@ -26,7 +30,7 @@ function App() {
     <ApolloProvider client={client}>
       <Navbar />
       <Component />
-      <Footer />
+      {/* <Footer /> */}
     </ApolloProvider>
   );
   // return (

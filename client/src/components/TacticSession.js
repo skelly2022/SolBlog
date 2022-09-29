@@ -9,21 +9,37 @@ import wrongmove from "../audio/incorrect move.wav";
 import axios from "axios";
 import Timer from "./Timer";
 import { getSideToPlayFromFen } from "../utils/chessTactics";
+import { useQuery, useMutation } from "@apollo/client";
+import { CREATE_VOTE } from "../utils/mutations";
+import { QUERY_SCORE } from "../utils/queries";
 
 const TacticSession = () => {
   const [chessboardSize, setChessboardSize] = useState(undefined);
-  const [score, SetScore] = useState(0);
   const [key, setKey] = useState(Date.now());
   const [tactic, setTactic] = useState({});
+  const [score, SetScore] = useState(0);
   const { show } = useGameState();
   const { updateShow } = useGameUpdateState();
   const { gameOver } = useGameState();
   const { updateGameOver } = useGameUpdateState();
   const { reset } = useGameUpdateState();
+
   const [loading, setLoading] = useState(true);
 
-
   const [walletAddress, setWalletAddress] = useState(null);
+
+  const cat = localStorage.getItem("wallet");
+
+  const adding = { wallet: cat };
+
+  const { data } = useQuery(QUERY_SCORE, {
+    variables: { ...adding },
+  });
+
+  const x = data
+  console.log(x);
+
+  // SetScore(data.score.highScore);
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -31,26 +47,26 @@ const TacticSession = () => {
 
       if (solana) {
         if (solana.isPhantom) {
-          console.log('Phantom wallet found!');
+          console.log("Phantom wallet found!");
           const response = await solana.connect({ onlyIfTrusted: true });
           console.log(
-            'Connected with Public Key:',
+            "Connected with Public Key:",
             response.publicKey.toString()
           );
 
           /*
            * Set the user's publicKey in state to be used later!
            */
+
           setWalletAddress(response.publicKey.toString());
         }
       } else {
-        alert('Solana object not found! Get a Phantom Wallet 👻');
+        alert("Solana object not found! Get a Phantom Wallet 👻");
       }
     } catch (error) {
       console.error(error);
     }
   };
-
 
   async function getPuzzle() {
     let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
@@ -116,8 +132,8 @@ const TacticSession = () => {
     const onLoad = async () => {
       await checkIfWalletIsConnected();
     };
-    window.addEventListener('load', onLoad);
-    return () => window.removeEventListener('load', onLoad);
+    window.addEventListener("load", onLoad);
+    return () => window.removeEventListener("load", onLoad);
   }, []);
 
   async function solutionFunction() {
@@ -127,6 +143,14 @@ const TacticSession = () => {
       audio.pause();
     }, 800);
     SetScore(score + 1);
+    // try {
+    //   await createVote({
+    //     variables: { wallet: walletAddress, scores1 },
+
+    //   });
+    // } catch (err) {
+    //   console.error(err);
+    // }
     await getPuzzle();
     setKey(Date.now());
   }
@@ -145,19 +169,13 @@ const TacticSession = () => {
     setTimeout(() => {
       audio.pause();
     }, 1000);
-    updateGameOver();
-    updateShow();
+    SetScore(score - 1);
+    await getPuzzle();
+    setKey(Date.now());
   }
-
   return (
     <>
-      {loading ? (
-        <div className="loader-wrapper">
-          <div className="loader">
-            <div className="loader loader-inner"></div>
-          </div>
-        </div>
-      ) : (
+     { (
         <>
           <Container className="mainContainer">
             <Col className="chessBody">
@@ -178,7 +196,7 @@ const TacticSession = () => {
                 <Card className="cardShadow">
                   <ListGroup>
                     <ListGroup.Item>
-                      <Timer time={{ hours: 0, minutes: 5, seconds: 0 }} />
+                      {/* <Timer time={{ hours: 0, minutes: 0, seconds: 10 }} /> */}
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <div style={{ textAlign: "center" }}>
@@ -195,7 +213,7 @@ const TacticSession = () => {
               </Col>
             )}
 
-            <Modal
+            {/* <Modal
               show={show}
               onHide={updateShow}
               backdrop="static"
@@ -215,12 +233,12 @@ const TacticSession = () => {
                   Return to menu
                 </Link>
               </Modal.Footer>
-            </Modal>
+            </Modal> */}
           </Container>
         </>
       )}
     </>
   );
-}
+};
 
 export default TacticSession;

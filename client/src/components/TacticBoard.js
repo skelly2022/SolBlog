@@ -89,6 +89,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
 
     const next = validateMoveOnClick(fen, data, solution);
 
+    console.log(next);
+
     if (next) {
       setFen(next.fen);
       setSolution(next.solution);

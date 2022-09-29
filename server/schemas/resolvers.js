@@ -1,4 +1,5 @@
 const { Score } = require('../models');
+const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -6,38 +7,36 @@ const resolvers = {
       return Score.find().sort({ createdAt: -1 });
     },
 
-    score: async (parent, { scoreId }) => {
-      return Score.findOne({ _id: scoreId });
+    score: async (parent, { wallet }) => {
+      return Score.findOne({ wallet: wallet });
     },
   },
 
-  // Mutation: {
-  //   addScore: async (parent, { wallet, highScore }) => {
-  //     return Score.create({ wallet, highScore });
-  //   },
-  //   addComment: async (parent, { ScoreId, commentText }) => {
-  //     return Score.findOneAndUpdate(
-  //       { _id: ScoreId },
-  //       {
-  //         $addToSet: { comments: { commentText } },
-  //       },
-  //       {
-  //         new: true,
-  //         runValidators: true,
-  //       }
-  //     );
-  //   },
-  //   removeScore: async (parent, { ScoreId }) => {
-  //     return Score.findOneAndDelete({ _id: ScoreId });
-  //   },
-  //   removeComment: async (parent, { ScoreId, commentId }) => {
-  //     return Score.findOneAndUpdate(
-  //       { _id: ScoreId },
-  //       { $pull: { comments: { _id: commentId } } },
-  //       { new: true }
-  //     );
-  //   },
-  // },
+  Mutation: {
+    createVote: async (parent, { _id}) => {
+      const vote = await Score.findOneAndUpdate(
+        { _id },
+        { $inc: { [`highScore`]: 1} },
+        { new: true }
+      );
+      return vote;
+    },
+    addUser: async (parent, { wallet}) => {
+        // First we create the user
+        const user = await  Score.findOne({ wallet });
+        
+        if (user) { 
+         
+          return user
+        }
+        else {
+          const user = await Score.create( {wallet});
+          const token = signToken(user);
+          return {token, user}
+          
+        }
+      },
+  },
 };
 
 module.exports = resolvers;

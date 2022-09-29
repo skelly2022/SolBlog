@@ -10,42 +10,57 @@ const TacticMenu = () => {
   const { loading, data } = useQuery(QUERY_SCORES);
   const scores = data?.scores || [];
 
-  console.log(scores);
-
   // Actions
-  const checkIfWalletIsConnected = async () => {
-    try {
-      const { solana } = window;
+  // const checkIfWalletIsConnected = async () => {
+  //   try {
+  //     const { solana } = window;
 
-      if (solana) {
-        if (solana.isPhantom) {
-          console.log("Phantom wallet found!");
-          const response = await solana.connect({ onlyIfTrusted: true });
-          console.log(
-            "Connected with Public Key:",
-            response.publicKey.toString()
-          );
+  //     if (solana) {
+  //       if (solana.isPhantom) {
+  //         console.log("Phantom wallet found!");
+  //         const response = await solana.connect({ onlyIfTrusted: true });
+  //         console.log(
+  //           "Connected with Public Key:",
+  //           response.publicKey.toString()
+  //         );
 
-          /*
-           * Set the user's publicKey in state to be used later!
-           */
-          setWalletAddress(response.publicKey.toString());
-        }
-      } else {
-        alert("Solana object not found! Get a Phantom Wallet 👻");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+  //         /*
+  //          * Set the user's publicKey in state to be used later!
+  //          */
+  //         setWalletAddress(response.publicKey.toString());
+          
+  //       }
+  //     } else {
+  //       alert("Solana object not found! Get a Phantom Wallet 👻");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const addUser = async () => {
+  //   try {
+  //     console.log("we tryin");
+  //     const { data } = await addUser({
+  //       variables: { ...formState }
+  //     });
+  //     console.log("username created", data);
+
+  //   } catch (err) {
+  //     if (err) throw err;
+  //     console.log(err);
+  //   }
+  // };
 
   const connectWallet = async () => {
     const { solana } = window;
 
     if (solana) {
       const response = await solana.connect();
-      console.log("Connected with Public Key:", response.publicKey.toString());
+      console.log(response.publicKey.toString);
       setWalletAddress(response.publicKey.toString());
+      
     }
   };
 
@@ -69,13 +84,13 @@ const TacticMenu = () => {
   );
 
   // UseEffects
-  useEffect(() => {
-    const onLoad = async () => {
-      await checkIfWalletIsConnected();
-    };
-    window.addEventListener("load", onLoad);
-    return () => window.removeEventListener("load", onLoad);
-  }, []);
+  // useEffect(() => {
+  //   const onLoad = async () => {
+  //     await checkIfWalletIsConnected();
+  //   };
+  //   window.addEventListener("load", onLoad);
+  //   return () => window.removeEventListener("load", onLoad);
+  // }, []);
 
   return (
     <div
@@ -95,7 +110,7 @@ const TacticMenu = () => {
         {walletAddress && renderConnectedWallet()}
       </div>
 
-      <div className="Intro2">
+      <div>
         {loading ? (
           <div>Loading...</div>
         ) : (

@@ -9,6 +9,11 @@ const typeDefs = gql`
     comments: [Comment]!
   }
 
+  type Auth {
+    token: ID!
+    user: Score
+  }
+
   type Comment {
     _id: ID
     commentText: String
@@ -17,14 +22,12 @@ const typeDefs = gql`
 
   type Query {
     scores: [Score]!
-    score(scoreId: ID!): Score
+    score(wallet: String!): Score
   }
 
   type Mutation {
-    addScore(wallet: String!, highScore: String!): Score
-    addComment(ScoreId: ID!, commentText: String!): Score
-    removeScore(ScoreId: ID!): Score
-    removeComment(ScoreId: ID!, commentId: ID!): Score
+    createVote(_id: String!): Score
+    addUser(wallet: String!): Auth
   }
 `;
 

@@ -7,6 +7,7 @@ html{
 body {
   width: 100%;
   height: 100%;
+  background-color: #35aee2;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -98,7 +99,7 @@ code {
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 2rem;
 border: 1rem;
-  justify-items: center;
+  justify-content: space-between;
   margin: 0;
   padding: 0;
 }
