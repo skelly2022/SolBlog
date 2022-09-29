@@ -16,7 +16,7 @@ const resolvers = {
     createVote: async (parent, { _id}) => {
       const vote = await Score.findOneAndUpdate(
         { _id },
-        { $inc: { [`highScore`]: 1} },
+        { $inc: { [`highScore`]: -1} },
         { new: true }
       );
       return vote;

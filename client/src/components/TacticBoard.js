@@ -18,6 +18,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   //const [inCheck, setInCheck] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+   
     setSolution(tactic.solution);
     setTimeout(() => {
       const next = makeMove(tactic.fen, tactic.blunderMove);
@@ -25,6 +27,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
         setFen(next.fen);
       }
     }, 700);
+    return () => { isMounted = false };
   }, [tactic]);
 
   function getMoveOptions(square) {

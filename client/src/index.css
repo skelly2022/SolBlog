@@ -120,6 +120,7 @@ border: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .mainContainer{
@@ -128,6 +129,7 @@ border: 1rem;
   justify-content: center;
   padding: 10px;
   height: 89.5%;
+ 
 }
 
 .cardShadow{

@@ -10,34 +10,36 @@ import axios from "axios";
 import Timer from "./Timer";
 import { getSideToPlayFromFen } from "../utils/chessTactics";
 import { useQuery, useMutation } from "@apollo/client";
-import { CREATE_VOTE } from "../utils/mutations";
 import { QUERY_SCORE } from "../utils/queries";
 
 const TacticSession = () => {
-  const [chessboardSize, setChessboardSize] = useState(undefined);
+
+  
+  const [chessboardSize, setChessboardSize] = useState(500);
   const [key, setKey] = useState(Date.now());
   const [tactic, setTactic] = useState({});
   const [score, SetScore] = useState(0);
-  const { show } = useGameState();
-  const { updateShow } = useGameUpdateState();
-  const { gameOver } = useGameState();
-  const { updateGameOver } = useGameUpdateState();
-  const { reset } = useGameUpdateState();
 
+  const { gameOver } = useGameState();
+  // const { show } = useGameState();
+  // const { updateShow } = useGameUpdateState();
+  // const { updateGameOver } = useGameUpdateState();
+  // const { reset } = useGameUpdateState();
   const [loading, setLoading] = useState(true);
 
   const [walletAddress, setWalletAddress] = useState(null);
 
   const cat = localStorage.getItem("wallet");
-
   const adding = { wallet: cat };
-
+  
   const { data } = useQuery(QUERY_SCORE, {
     variables: { ...adding },
   });
+  const x = data;
 
-  const x = data
-  console.log(x);
+//   if (x.score.length>0){
+// console.log(x);
+//   };
 
   // SetScore(data.score.highScore);
 
@@ -59,10 +61,19 @@ const TacticSession = () => {
            */
 
           setWalletAddress(response.publicKey.toString());
+        
         }
       } else {
         alert("Solana object not found! Get a Phantom Wallet 👻");
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const postScore= async (newScore) => {
+    try {
+
     } catch (error) {
       console.error(error);
     }
@@ -79,15 +90,10 @@ const TacticSession = () => {
     );
 
     setTactic(data);
-
     setInterval(() => {
       setLoading(false);
     }, 3000);
   }
-
-  useEffect(() => {
-    getPuzzle();
-  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -102,7 +108,7 @@ const TacticSession = () => {
         );
 
         if (display.offsetWidth >= 1140) {
-          setChessboardSize(display.offsetWidth * 0.59);
+          setChessboardSize(display.offsetWidth * 0.49);
         }
 
         if (display.offsetWidth >= 960 && display.offsetWidth < 1140) {
@@ -129,6 +135,18 @@ const TacticSession = () => {
   }, [loading]);
 
   useEffect(() => {
+    if (!loading) {
+      const currentScore = x.score.highScore;
+      SetScore(currentScore)
+    }
+  }, [loading]);
+
+  useEffect(() => {
+  
+    getPuzzle();
+  }, []);
+
+  useEffect(() => {
     const onLoad = async () => {
       await checkIfWalletIsConnected();
     };
@@ -138,26 +156,20 @@ const TacticSession = () => {
 
   async function solutionFunction() {
     let audio = new Audio(solve);
-    audio.play();
+    // audio.play();
     setTimeout(() => {
       audio.pause();
     }, 800);
-    SetScore(score + 1);
-    // try {
-    //   await createVote({
-    //     variables: { wallet: walletAddress, scores1 },
-
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    const newScore = (+score + +1);
+    SetScore(newScore);
+    postScore(newScore);
     await getPuzzle();
     setKey(Date.now());
   }
 
   async function correctFunction() {
     let audio = new Audio(chessmove);
-    audio.play();
+    // audio.play();
     setTimeout(() => {
       audio.pause();
     }, 200);
@@ -165,7 +177,7 @@ const TacticSession = () => {
 
   async function incorrectFunction() {
     let audio = new Audio(wrongmove);
-    audio.play();
+    // audio.play();
     setTimeout(() => {
       audio.pause();
     }, 1000);
@@ -175,7 +187,13 @@ const TacticSession = () => {
   }
   return (
     <>
-     { (
+        {loading ? (
+        <div className="loader-wrapper">
+          <div className="loader">
+            <div className="loader loader-inner"></div>
+          </div>
+        </div>
+      ) : (
         <>
           <Container className="mainContainer">
             <Col className="chessBody">
