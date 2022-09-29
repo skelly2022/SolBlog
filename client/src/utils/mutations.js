@@ -11,13 +11,9 @@ export const CREATE_MATCHUP = gql`
 `;
 
 export const CREATE_VOTE = gql`
-  mutation createVote($_id: String!, $techNum: Int!) {
-    createVote(_id: $_id, techNum: $techNum) {
-      _id
-      tech1
-      tech2
-      tech1_votes
-      tech2_votes
+  mutation createVote($_id: String!, $elo: String!) {
+    createVote(_id: $_id, elo: $elo) {
+      highScore
     }
   }
 `;

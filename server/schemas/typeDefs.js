@@ -26,7 +26,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createVote(_id: String!): Score
+    createVote(_id: String!,elo:String!): Score
     addUser(wallet: String!): Auth
   }
 `;

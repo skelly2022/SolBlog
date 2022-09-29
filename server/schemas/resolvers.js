@@ -4,7 +4,7 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     scores: async () => {
-      return Score.find().sort({ createdAt: -1 });
+      return Score.find().sort({ highScore: -1 });
     },
 
     score: async (parent, { wallet }) => {
@@ -13,10 +13,11 @@ const resolvers = {
   },
 
   Mutation: {
-    createVote: async (parent, { _id}) => {
+    createVote: async (parent, args) => {
+      console.log(args.elo);
       const vote = await Score.findOneAndUpdate(
-        { _id },
-        { $inc: { [`highScore`]: -1} },
+        { _id:args._id },
+        { $set: { [`highScore`]: args.elo} },
         { new: true }
       );
       return vote;

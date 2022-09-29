@@ -13,6 +13,7 @@ export const QUERY_SCORES = gql`
 export const QUERY_SCORE = gql`
   query score($wallet: String!) {
     score(wallet: $wallet) {
+      _id
       highScore
     }
   }

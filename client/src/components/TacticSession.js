@@ -11,10 +11,9 @@ import Timer from "./Timer";
 import { getSideToPlayFromFen } from "../utils/chessTactics";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_SCORE } from "../utils/queries";
+import { CREATE_VOTE } from "../utils/mutations";
 
 const TacticSession = () => {
-
-  
   const [chessboardSize, setChessboardSize] = useState(500);
   const [key, setKey] = useState(Date.now());
   const [tactic, setTactic] = useState({});
@@ -28,18 +27,19 @@ const TacticSession = () => {
   const [loading, setLoading] = useState(true);
 
   const [walletAddress, setWalletAddress] = useState(null);
+  const [updateScore, { error }] = useMutation(CREATE_VOTE);
 
   const cat = localStorage.getItem("wallet");
   const adding = { wallet: cat };
-  
+
   const { data } = useQuery(QUERY_SCORE, {
     variables: { ...adding },
   });
   const x = data;
 
-//   if (x.score.length>0){
-// console.log(x);
-//   };
+  //   if (x.score.length>0){
+  // console.log(x);
+  //   };
 
   // SetScore(data.score.highScore);
 
@@ -61,7 +61,6 @@ const TacticSession = () => {
            */
 
           setWalletAddress(response.publicKey.toString());
-        
         }
       } else {
         alert("Solana object not found! Get a Phantom Wallet 👻");
@@ -71,9 +70,15 @@ const TacticSession = () => {
     }
   };
 
-  const postScore= async (newScore) => {
+  const postScore = async (newScore) => {
+    const id = window.localStorage.getItem("id");
+    console.log(newScore);
+    // scoreChange = newScore;
+    const updateS = { _id: id, elo: newScore.toString()};
     try {
-
+      const { data } = await updateScore({
+        variables: { ...updateS },
+      });
     } catch (error) {
       console.error(error);
     }
@@ -136,13 +141,16 @@ const TacticSession = () => {
 
   useEffect(() => {
     if (!loading) {
+      console.log(x);
+      const iD = x.score._id;
+      localStorage.removeItem("id");
+      localStorage.setItem("id", iD);
       const currentScore = x.score.highScore;
-      SetScore(currentScore)
+      SetScore(currentScore);
     }
   }, [loading]);
 
   useEffect(() => {
-  
     getPuzzle();
   }, []);
 
@@ -160,7 +168,7 @@ const TacticSession = () => {
     setTimeout(() => {
       audio.pause();
     }, 800);
-    const newScore = (+score + +1);
+    const newScore = +score + +1;
     SetScore(newScore);
     postScore(newScore);
     await getPuzzle();
@@ -181,13 +189,15 @@ const TacticSession = () => {
     setTimeout(() => {
       audio.pause();
     }, 1000);
-    SetScore(score - 1);
+    const newScore = score - 1;
+    SetScore(newScore);
+    postScore(newScore);
     await getPuzzle();
     setKey(Date.now());
   }
   return (
     <>
-        {loading ? (
+      {loading ? (
         <div className="loader-wrapper">
           <div className="loader">
             <div className="loader loader-inner"></div>
