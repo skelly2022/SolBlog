@@ -1,0 +1,13 @@
+
+* {
+    box-sizing: border-box;
+  }
+  
+  .home {
+    height: 100vh;
+    background-color: #141141;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+  
+  }

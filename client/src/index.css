@@ -1,0 +1,215 @@
+@import url("https://fonts.googleapis.com/css2?family=Praise&display=swap");
+
+html {
+  width: 100%;
+  height: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #060b26;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+#root {
+  height: 100%;
+  background-color: rgb(26, 24, 24);
+}
+
+.counter {
+  font-size: 2rem;
+}
+
+.Intro {
+  width: 40%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  margin: 20px;
+}
+
+.Intro2 {
+  font-family: "Praise", cursive;
+  width: 20%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ecf4ff;
+  margin: 50px;
+}
+
+.introText {
+  font-size: 4.5rem;
+}
+
+.connectedWallet {
+  padding-top: 20px;
+}
+
+.highScoreh1 {
+  color: #60a5e8;
+}
+
+.cta-button {
+  height: 45px;
+  border: 0;
+  width: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.connect-wallet-button {
+  background: -webkit-linear-gradient(left, #60c657, #35aee2);
+  background-size: 200% 200%;
+  animation: gradient-animation 4s ease infinite;
+}
+
+.gif-grid {
+  /* display: flex; */
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 5rem;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.gif-item {
+  display: flex;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 2rem;
+  border: 1rem;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.chessHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  flex-direction: column;
+}
+
+.chessBody {
+  flex: 1;
+}
+
+.chessContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 89.5%;
+}
+
+.cardShadow {
+  box-shadow: 0 0.125rem 0.85rem rgb(233, 230, 230);
+}
+
+.loader-wrapper {
+  width: 250px;
+  height: 250px;
+  margin: auto;
+  position: relative;
+  top: 170px;
+}
+
+.loader-inner {
+  border-top-color: #36f372;
+  border-bottom-color: #fff;
+  animation-duration: 2.5s;
+}
+
+.loader {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 10px solid #162534;
+  border-top-color: #4bc8eb;
+  border-bottom-color: #f13a8f;
+  border-radius: 50%;
+  animation: rotate 5s linear infinite;
+}
+
+.help {
+  margin-top: 50px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes rotate {
+  0% {
+    transform: scale(1) rotate(360deg);
+  }
+  50% {
+    transform: scale(0.8) rotate(-360deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .chessHeader {
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .mainContainer {
+    flex-direction: column-reverse;
+  }
+
+  .list-group {
+    flex-direction: row !important;
+  }
+
+  .list-group-item {
+    padding: 3px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .chessHeader {
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .mainContainer {
+    flex-direction: column-reverse;
+  }
+
+  .list-group {
+    flex-direction: row !important;
+  }
+
+  .list-group-item {
+    padding: 3px !important;
+  }
+}
