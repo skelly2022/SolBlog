@@ -125,8 +125,18 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+ left: 400px;
   height: 89.5%;
+  position: absolute;
+}
+
+.listgroupitem{
+  padding-top: 10px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .cardShadow {

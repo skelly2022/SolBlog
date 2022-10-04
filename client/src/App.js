@@ -1,15 +1,13 @@
-import TacticMenu from "./components/TacticMenu";
 import HomeMenu from "./components/HomeMenu";
 import RoadMap from "./components/RoadMap";
 import LeaderBoard from "./components/LeaderBoard"
 import TacticSession from "./components/TacticSession";
-import PlayVsPlay from "./components/PlayVsPlay";
+// import PlayVsPlay from "./components/PlayVsPlay";
 // import { Routes, Route, Router  } from "react-router-dom";
 import Navbar from "./components/sub/NavBar";
-import Footer from "./components/sub/Footer";
+// import Footer from "./components/sub/Footer";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import {BrowserRouter as Router, Switch, Route, Routes} from 'react-router-dom';
-
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 
 const client = new ApolloClient({
@@ -40,9 +38,9 @@ function App() {
       <Navbar />
       <Routes>
       <Route path="/" element={<HomeMenu />}></Route>
-      <Route path="/roadmap" element={<RoadMap />}></Route>
-      <Route path="/leaderboard" element={<LeaderBoard />}></Route>
-      <Route path="/play" element={<TacticSession />}></Route>
+      <Route path="roadmap" element={<RoadMap />}></Route>
+      <Route path="leaderboard" element={<LeaderBoard />}></Route>
+      <Route path="play" element={<TacticSession />}></Route>
  
   </Routes>
   

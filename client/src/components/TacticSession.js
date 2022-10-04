@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useGameState, useGameUpdateState } from "../utils/GameContext";
-import { Container, Modal, Col, Card, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useGameState } from "../utils/GameContext";
+import { Container, Col, Card, ListGroup } from "react-bootstrap";
 import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
 import solve from "../audio/puzzle solve.wav";
 import wrongmove from "../audio/incorrect move.wav";
 import axios from "axios";
-import Timer from "./Timer";
+// import Timer from "./Timer";
 import { getSideToPlayFromFen } from "../utils/chessTactics";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_SCORE } from "../utils/queries";
@@ -26,8 +25,10 @@ const TacticSession = () => {
   // const { reset } = useGameUpdateState();
   const [loading, setLoading] = useState(true);
 
-  const [walletAddress, setWalletAddress] = useState(null);
+  const [wallet, setWalletAddress] = useState(null);
   const [updateScore, { error }] = useMutation(CREATE_VOTE);
+
+  console.log(wallet);
 
   const cat = localStorage.getItem("wallet");
   const adding = { wallet: cat };
@@ -60,7 +61,6 @@ const TacticSession = () => {
            * Set the user's publicKey in state to be used later!
            */
 
-          setWalletAddress(response.publicKey.toString());
         }
       } else {
         alert("Solana object not found! Get a Phantom Wallet 👻");
@@ -74,7 +74,7 @@ const TacticSession = () => {
     const id = window.localStorage.getItem("id");
     console.log(newScore);
     // scoreChange = newScore;
-    const updateS = { _id: id, elo: newScore.toString()};
+    const updateS = { _id: id, elo: newScore.toString() };
     try {
       const { data } = await updateScore({
         variables: { ...updateS },
@@ -85,18 +85,15 @@ const TacticSession = () => {
   };
 
   async function getPuzzle() {
-    let data = await axios("https://chess-puzzle-server.herokuapp.com/").then(
-      (data) => {
-        const payload = data.data;
-    
-
-        return payload;
+    const res = await axios.post(
+      `https://afternoon-peak-46279.herokuapp.com/https://chessblunders.org/api/blunder/get`,
+      {
+        type: "explore",
       }
     );
 
-    const potential = {id:'10',blunderMover:'b3',fen:'3r3k/6bp/2p3p1/p1P3P1/8/RB2R3/1P3P2/2Kbr3 w - - 0 38',solution: ['Rxe1','Bxb3','Rxb3']}
-console.log(data);
-console.log(potential);
+    const data = res.data.data;
+    console.log(data);
     setTactic(data);
     setInterval(() => {
       setLoading(false);
@@ -144,11 +141,14 @@ console.log(potential);
 
   useEffect(() => {
     if (!loading) {
-      console.log(x);
       const iD = x.score._id;
       localStorage.removeItem("id");
       localStorage.setItem("id", iD);
+     const wallet = window.localStorage.getItem("wallet").substring(0,5);
+     console.log(wallet);
+
       const currentScore = x.score.highScore;
+      setWalletAddress(wallet);
       SetScore(currentScore);
     }
   }, [loading]);
@@ -209,8 +209,7 @@ console.log(potential);
       ) : (
         <>
           <Container className="mainContainer">
-            <Col className="chessBody">
-              <Container className="chessContainer">
+
                 <TacticBoard
                   key={key}
                   tactic={tactic}
@@ -219,30 +218,24 @@ console.log(potential);
                   onIncorrect={incorrectFunction}
                   onSolve={solutionFunction}
                 />
-              </Container>
-            </Col>
+            
 
-            {!gameOver && (
-              <Col className="chessHeader">
-                <Card className="cardShadow">
-                  <ListGroup>
-                    <ListGroup.Item>
-                      {/* <Timer time={{ hours: 0, minutes: 0, seconds: 10 }} /> */}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <div style={{ textAlign: "center" }}>
-                        <h2>Score: {score}</h2>
-                        <h4>
-                          {getSideToPlayFromFen(tactic.fen) === "b"
-                            ? "White to Play"
-                            : "Black to Play"}
-                        </h4>
-                      </div>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Card>
-              </Col>
-            )}
+            <Col className="chessHeader">
+              <Card className="cardShadow">
+                <ListGroup>
+                  <ListGroup.Item>
+                    {/* <Timer time={{ hours: 0, minutes: 0, seconds: 10 }} /> */}
+                  </ListGroup.Item>
+
+                  <ListGroup.Item>
+                    <div style={{ textAlign: "center" }}>
+                      <h2>Wallet: {wallet}...</h2>
+                      <h2> Your elo: {score}</h2>
+                    </div>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card>
+            </Col>
 
             {/* <Modal
               show={show}

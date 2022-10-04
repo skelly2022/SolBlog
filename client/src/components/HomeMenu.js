@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./css/HomePage.css";
 import { useQuery } from "@apollo/client";
 import { QUERY_SCORES } from "../utils/queries";
-import { QUERY_SCORE } from "../utils/queries";
-import ScoreList from "../components/ScoreList";
+// import { QUERY_SCORE } from "../utils/queries";
+// import ScoreList from "../components/ScoreList";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../utils/mutations";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
+import * as BsIcons from "react-icons/bs";
+import * as FaIcons from "react-icons/fa";
+import * as AiIcons from "react-icons/ai";
 
 const HomeMenu = () => {
   // State
@@ -83,7 +86,8 @@ const HomeMenu = () => {
 
   const renderNotConnectedContainer = () => (
     <div className="hero">
-      <div className="herotxt">
+      <div className="herohome">
+      <div className="herofeature">
         <h1>Solana Chess</h1>
         <h4>Currently under production</h4>
         <button
@@ -93,27 +97,48 @@ const HomeMenu = () => {
           Connect to Wallet
         </button>
       </div>
+      
+      <div className="herofeature">
+      <Link to="/leaderboard" className="">
+          <BsIcons.BsTwitter size={50} />
+        </Link>
+        <Link to="/leaderboard" className="">
+          <FaIcons.FaDiscord size={50} />
+        </Link>
+        <Link to="/leaderboard" className="btn2">
+          <h4 className="leaderboard2">LeaderBoard</h4>
+        </Link>
+        
+        </div>
+      </div>
     </div>
   );
 
   const renderPuzzlePlay = () => (
     <div className="games">
-    
       <div className="herofeature">
         <h1>Play Puzzle Rush</h1>
-        <a className="  btn1 " href="/play">
-          Launch App
-        </a>
+        <Link to="play" className="">
+          <AiIcons.AiFillPlayCircle size={50} />
+        </Link>
         <h1>Play vs Friend</h1>
-        <a className="  btn1 " href="/play">
-          Launch App
-        </a>
+        <Link to="play" className="">
+          <AiIcons.AiFillPlayCircle size={50} />
+        </Link>
       </div>
-      <div className="socials">
-      <Link to ="/leaderboard" className="btn2">
-     <h4 className='leaderboard2'>LeaderBoard</h4>
-   </Link>
+      <div className="herofeature">
+      <Link to="/play" className="">
+          <BsIcons.BsTwitter size={50} />
+        </Link>
+        <Link to="play" className="">
+          <FaIcons.FaDiscord size={50} />
+        </Link>
+        <Link to="/leaderboard" className="btn2">
+          <h4 className="leaderboard2">LeaderBoard</h4>
+        </Link>
+      
       </div>
+    
 
     </div>
   );
@@ -137,7 +162,6 @@ const HomeMenu = () => {
     <div className="body">
       {!walletAddress && renderNotConnectedContainer()}
       {walletAddress && renderPuzzlePlay()}
-
     </div>
   );
 };

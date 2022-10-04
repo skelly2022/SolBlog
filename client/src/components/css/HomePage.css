@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
 }
@@ -7,47 +6,44 @@
   height: 100vh;
   background-color: #060b26;
   z-index: 0;
-
 }
 
 .hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/chesshero.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../assets/chesshero.jpg");
 
   /* Set a specific height */
   height: 80%;
-
   /* Position and center the image to scale nicely on all screens */
   background-position: center;
   background-repeat: no-repeat;
   background-size: 80%;
-  margin-left: 100px;
   display: flex;
-
-  
-
+  align-items: center;
+  flex-direction: row; 
+  justify-content: space-evenly;
 }
 
-.herotxt {
-    text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.herohome {
   color: white;
+  justify-content: space-evenly;
+  align-items: center;
+  display: flex;
+  width: 100%;
 }
 
-.games{
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/chesshero.jpg");
+.games {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../assets/chesshero.jpg");
   height: 80%;
   background-position: center;
   background-repeat: no-repeat;
-  margin-left: 100px;
+  /* margin-left: 100px; */
   background-size: 80%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  
 }
 
 .socials {
@@ -59,50 +55,47 @@
 .herofeature {
   color: white;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   /* justify-content: center;   */
-  align-items: center; 
-justify-content: space-between;
+  align-items: center;
+  /* justify-content: space-between; */
 }
 
-.btn1{
-  display:inline-block;
-  padding:0.3em 1.2em;
-  margin:0 0.3em 0.3em 0;
-  border-radius:2em;
+.btn1 {
+  display: inline-block;
+  padding: 0.3em 1.2em;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 2em;
   box-sizing: border-box;
-  text-decoration:none;
-  font-family:'Roboto',sans-serif;
-  font-weight:300;
-  color:#FFFFFF;
-  background-color:#4eb5f1;
-  text-align:center;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: #ffffff;
+  background-color: #4eb5f1;
+  text-align: center;
   transition: all 0.2s;
-  }
+}
 
-  .btn2{
-    display:flex;
-    padding:0.3em 1.2em;
-    margin:0 0.3em 0.3em 0;
-    border-radius:2em;
-    box-sizing: border-box;
-    text-decoration:none;
-    font-family:'Roboto',sans-serif;
-    font-weight:300;
-    color:#FFFFFF;
-    background-color:#4eb5f1;
-    transition: all 0.2s;
-    }
+.btn2 {
+  display: flex;
+  padding: 0.15em .6em;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 1em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  color: #ffffff;
+  background-color: #4eb5f1;
+  transition: all 0.2s;
+}
 
-    .leaderboard2 {
-     color: white;
-     margin-top: 3px;
-     
-    }
+.leaderboard2 {
+  margin-top: 5px;
+}
 
 .btn1:hover {
-  background-color:#DC1FFF;
-  
+  background-color: #dc1fff;
 }
 
 .feature {
@@ -116,25 +109,18 @@ justify-content: space-between;
   width: 100%;
 }
 
-  
-
-
-
 @media screen and (max-width: 800px) {
-    .feature {
-   width: 100%;
-    }
-    .features {
-        align-items: center;
-        flex-direction: column;
-    }
-    .highscoresfeature {
-      width: 100%;
+  .feature {
+    width: 100%;
   }
-  .hero{
+  .features {
+    align-items: center;
+    flex-direction: column;
+  }
+  .highscoresfeature {
+    width: 100%;
+  }
+  .hero {
     height: 500px;
   }
-  }
-
-
-  
+}

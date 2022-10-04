@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Container, Col } from "react-bootstrap";
 import {
   getSideToPlayFromFen,
   makeMove,
@@ -10,19 +11,23 @@ import {
 import { Chessboard } from "react-chessboard";
 
 function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
-  const [fen, setFen] = useState(tactic.fen);
+  const [fen, setFen] = useState(tactic.fenBefore);
   const [solution, setSolution] = useState([]);
   const [moveFrom, setMoveFrom] = useState("");
   const [rightClickedSquares, setRightClickedSquares] = useState({});
   const [optionSquares, setOptionSquares] = useState({});
   //const [inCheck, setInCheck] = useState(false);
 
+  console.log(solution[0]);
+
+  console.log(tactic);
+
   useEffect(() => {
     let isMounted = true;
    
-    setSolution(tactic.solution);
+    setSolution(tactic.forcedLine);
     setTimeout(() => {
-      const next = makeMove(tactic.fen, tactic.blunderMove);
+      const next = makeMove(tactic.fenBefore, tactic.blunderMove);
       if (next) {
         setFen(next.fen);
       }
@@ -90,6 +95,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
 
     currentMove = getMoveOnClick(fen, data);
 
+    console.log(currentMove);
+
     const next = validateMoveOnClick(fen, data, solution);
 
     console.log(next);
@@ -147,13 +154,15 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   }
 
   return (
+    <Col className="chessBody">
+    <Container className="chessContainer">
     <Chessboard
       id="tacticBoard"
       animationDuration={300}
       arePiecesDraggable={false}
       boardWidth={boardWidth}
       boardOrientation={
-        getSideToPlayFromFen(tactic.fen) === "b" ? "white" : "black"
+        getSideToPlayFromFen(tactic.fenBefore) === "b" ? "white" : "black"
       }
       position={fen}
       onSquareClick={onSquareClick}
@@ -165,8 +174,22 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
       customSquareStyles={{
         ...optionSquares,
         ...rightClickedSquares,
-      }}
-    />
+      }}/>
+    </Container>
+    <div className="listgroupitem">
+                    <h2>Tactic Elo: {tactic.elo}</h2>
+                    <h4>
+                      {getSideToPlayFromFen(tactic.fenBefore) === "b"
+                        ? "White to Play"
+                        : "Black to Play"}
+                    </h4>
+                    <button>
+                      Hint
+                    </button>
+                  </div>
+          </Col>
+
+    
   );
 }
 

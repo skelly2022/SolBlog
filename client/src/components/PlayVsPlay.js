@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Chess from "chess.js";
-import { Container, Modal, Col, Card, ListGroup } from "react-bootstrap";
+import { Container, Col, Card, ListGroup } from "react-bootstrap";
 
 import { Chessboard } from "react-chessboard";
 
@@ -8,13 +8,13 @@ export default function PlayVsPlay({ boardWidth }) {
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
 
-  function safeGameMutate(modify) {
-    setGame((g) => {
-      const update = { ...g };
-      modify(update);
-      return update;
-    });
-  }
+  // function safeGameMutate(modify) {
+  //   setGame((g) => {
+  //     const update = { ...g };
+  //     modify(update);
+  //     return update;
+  //   });
+  // }
 
   function onDrop(sourceSquare, targetSquare) {
     const gameCopy = { ...game };
