@@ -14,7 +14,7 @@
     "axios": "^0.26.1",
     "chess.js": "^0.12.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "socket.io-client": "^4.5.2",
     "express": "^4.17.3",
     "graphql": "^15.8.0",
     "nodejs": "^0.0.0",

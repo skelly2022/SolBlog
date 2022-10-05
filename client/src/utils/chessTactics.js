@@ -19,6 +19,7 @@ export function playerInCheck(fen) {
 
 export function getMoveOnClick(fen, data) {
   const next = moveOnCLick(fen, data);
+  console.log(next);
 
   return next ? next.moves.san : null;
 }
@@ -42,6 +43,7 @@ export function makeMove(fen, move) {
 }
 
 export function validateMoveOnClick(fen, move, solution) {
+  console.log(move);
   if (solution.length === 0) {
     return null;
   }

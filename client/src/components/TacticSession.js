@@ -28,7 +28,7 @@ const TacticSession = () => {
   const [wallet, setWalletAddress] = useState(null);
   const [updateScore, { error }] = useMutation(CREATE_VOTE);
 
-  console.log(wallet);
+  // console.log(wallet);
 
   const cat = localStorage.getItem("wallet");
   const adding = { wallet: cat };
@@ -171,12 +171,22 @@ const TacticSession = () => {
     setTimeout(() => {
       audio.pause();
     }, 800);
-    const newScore = +score + +1;
+
+if (score > tactic.elo){
+  const newScore = +score + +5;
     SetScore(newScore);
     postScore(newScore);
     await getPuzzle();
     setKey(Date.now());
-  }
+}
+else {
+  const newScore = +score + +10;
+  SetScore(newScore);
+  postScore(newScore);
+  await getPuzzle();
+  setKey(Date.now());
+}
+  };
 
   async function correctFunction() {
     let audio = new Audio(chessmove);

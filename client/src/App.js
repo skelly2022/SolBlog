@@ -16,21 +16,6 @@ const client = new ApolloClient({
 });
 
 function App() {
-  // let Component;
-
-  // switch (window.location.pathname) {
-  //   case "/":
-  //     Component = HomeMenu;
-  //     break;
-  //   case "/wfeqfeqw":
-  //     Component = TacticMenu;
-  //     break;
-  //   case "/play":
-  //     Component = TacticSession;
-  //     break;
-  //   case "/p":
-  //     Component = PlayVsPlay
-  // }
 
   return (
     <ApolloProvider client={client}>
@@ -46,16 +31,6 @@ function App() {
   
     </ApolloProvider>
   );
-  // return (
-
-  //   <Routes>
-  //     <>
-  //       <Route path="/" element={<TacticMenu />} />
-  //       <Route path="/beginner" element={<TacticSession />} />
-  //     </>
-  //   </Routes>
-
-  // );
 }
 
 export default App;

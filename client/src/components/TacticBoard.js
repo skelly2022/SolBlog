@@ -18,9 +18,18 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
   const [optionSquares, setOptionSquares] = useState({});
   //const [inCheck, setInCheck] = useState(false);
 
-  console.log(solution[0]);
+  // console.log(solution[0]);
 
-  console.log(tactic);
+  // console.log(tactic);
+
+  async function showHint() {
+    var x = document.getElementById('SectionName');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
 
   useEffect(() => {
     let isMounted = true;
@@ -70,7 +79,7 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
     });
   }*/
 
-  function onSquareClick(square) {
+  function onSquareClick(square,targetSquare) {
     let currentMove;
 
     setRightClickedSquares({});
@@ -88,8 +97,8 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
 
     // attempt to make move
     let data = {
-      from: moveFrom,
-      to: square,
+      from: square,
+      to: targetSquare,
       promotion: "q",
     };
 
@@ -159,12 +168,14 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
     <Chessboard
       id="tacticBoard"
       animationDuration={300}
-      arePiecesDraggable={false}
+      arePiecesDraggable={true}
       boardWidth={boardWidth}
+      onPieceDrop={onSquareClick}
       boardOrientation={
         getSideToPlayFromFen(tactic.fenBefore) === "b" ? "white" : "black"
       }
       position={fen}
+      onPieceDragBegin={onSquareClick}
       onSquareClick={onSquareClick}
       onSquareRightClick={onSquareRightClick}
       customBoardStyle={{
@@ -183,9 +194,10 @@ function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {
                         ? "White to Play"
                         : "Black to Play"}
                     </h4>
-                    <button>
+                    <button onClick={showHint}>
                       Hint
                     </button>
+                    {/* <h4 id="SectionName" style="display:none">{solution[0]}</h4> */}
                   </div>
           </Col>
 
