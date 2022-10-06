@@ -7,7 +7,7 @@ import {
   validateMoveOnClick,
   getMoveOnClick,
   //playerInCheck,
-} from "../utils/chessTactics";
+} from "../../utils/chessTactics";
 import { Chessboard } from "react-chessboard";
 
 function TacticBoard({ tactic, onSolve, onCorrect, onIncorrect, boardWidth }) {

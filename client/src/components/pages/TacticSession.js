@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGameState } from "../utils/GameContext";
+import { useGameState } from "../../utils/GameContext";
 import { Container, Col, Card, ListGroup } from "react-bootstrap";
 import TacticBoard from "./TacticBoard";
 import chessmove from "../audio/chessmove.wav";
@@ -7,10 +7,10 @@ import solve from "../audio/puzzle solve.wav";
 import wrongmove from "../audio/incorrect move.wav";
 import axios from "axios";
 // import Timer from "./Timer";
-import { getSideToPlayFromFen } from "../utils/chessTactics";
+import { getSideToPlayFromFen } from "../../utils/chessTactics";
 import { useQuery, useMutation } from "@apollo/client";
-import { QUERY_SCORE } from "../utils/queries";
-import { CREATE_VOTE } from "../utils/mutations";
+import { QUERY_SCORE } from "../../utils/queries";
+import { CREATE_VOTE } from "../../utils/mutations";
 
 const TacticSession = () => {
   const [chessboardSize, setChessboardSize] = useState(500);

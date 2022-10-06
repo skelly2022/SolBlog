@@ -1,8 +1,8 @@
 import React, {useState}  from "react";
-import "./css/LeaderBoard.css";
-import ScoreList from "../components/ScoreList";
+import "../css/LeaderBoard.css";
+import ScoreList from "../ScoreList";
 import { useQuery } from "@apollo/client";
-import { QUERY_SCORES } from "../utils/queries";
+import { QUERY_SCORES } from "../../utils/queries";
 import {Link} from 'react-router-dom';
 
 function LeaderBoard () {
