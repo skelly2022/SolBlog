@@ -8,7 +8,7 @@ import qs from "qs";
 const socket = io.connect("http://localhost:5001");
 
 export default function PlayVsRandom(props) {
-  const room = 200;
+  const room = props.room;
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
   const [arrows, setArrows] = useState([]);
@@ -76,6 +76,7 @@ export default function PlayVsRandom(props) {
       console.log(data);
       setNewSourceSquare(data.sourceSquare);
       setNewTargetSquare(data.targetSquare);
+      onDrop(data.sourceSquare,data.targetSquare)
       return;
     });
     // eslint-disable-next-line

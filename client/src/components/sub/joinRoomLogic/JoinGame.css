@@ -1,0 +1,23 @@
+
+* {
+    box-sizing: border-box;
+  }
+  
+  
+  .createGame {
+    height: 100vh;
+    background-color: #141141;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+  }
+
+  .game {
+    display: flex;
+    flex-direction: column;
+  }
+  .color {
+    color:black
+  }

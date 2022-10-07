@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/RoadMap.css";
+import "../joinRoomLogic/CreateGame.css";
 import io from "socket.io-client";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
@@ -10,8 +10,9 @@ import Modal from "react-bootstrap/Modal";
 
 function RoadMap(props) {
 
-const reset = props.reset;
+const reset = props.resetGame;
 const submit = props.submit;
+
 
   // room state
   const [show, setShow] = useState(false);

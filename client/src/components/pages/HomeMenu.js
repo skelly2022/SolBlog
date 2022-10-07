@@ -10,10 +10,11 @@ import { Link, Navigate } from "react-router-dom";
 import * as BsIcons from "react-icons/bs";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import RoadMap from "./RoadMap";
+import CreateGame from "..//sub/joinRoomLogic/CreateGame";
 import PlayVsPlay from "./PlayVsPlay";
 import Board from "./Board";
 import io from "socket.io-client";
+import JoinGame from "../sub/joinRoomLogic/JoinGame";
 
 // const socket = io.connect("http://localhost:5001");
 
@@ -27,7 +28,7 @@ const HomeMenu = () => {
   // State
   const [walletAddress, setWalletAddress] = useState(null);
   const [game, setGame] = useState(0);
-  const [room, setRoom] = useState(0);
+  const [room, setRoom] = useState();
   const [gameTime, setGameTime] = useState(0);
   const [gameColor, setColor] = useState(0);
 
@@ -138,15 +139,14 @@ const HomeMenu = () => {
 
   const startGame = () => {
     setGame(1);
-    console.log("hey");
+
   };
   const joinGame = () => {
-    console.log("hey");
+    setGame(2);
   };
 
   const resetGame = () => {
     setGame(0);
-    console.log("hey");
   };
 
   const submit = () => {
@@ -159,7 +159,15 @@ const HomeMenu = () => {
     setGame(3);
     const room = randomIntFromInterval(1, 1000);
     setRoom(room);
+  };
 
+
+  const joinRoom = () => {
+    const roomnumber = document.getElementById("roomnumber");
+    var room = parseInt(roomnumber.value);
+    setRoom(room);
+    setGame(3);
+   
   };
 
   const renderPuzzlePlay = () => (
@@ -219,7 +227,14 @@ const HomeMenu = () => {
   if (game === 1) {
     return (
       <div className="body">
-        <RoadMap resetGame={resetGame} submit={submit} />
+        <CreateGame resetGame={resetGame} submit={submit} />
+      </div>
+    );
+  }
+  if (game === 2) {
+    return (
+      <div className="body">
+        <JoinGame resetGame={resetGame} submit={joinRoom} />
       </div>
     );
   }

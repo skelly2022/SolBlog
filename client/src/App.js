@@ -1,6 +1,5 @@
 import HomeMenu from "./components/pages/HomeMenu";
 import PlayVsPlay from "./components/pages/PlayVsPlay";
-import RoadMap from "./components/pages/RoadMap";
 import LeaderBoard from "./components/pages/LeaderBoard"
 import TacticSession from "./components/pages/TacticSession";
 // import PlayVsPlay from "./components/PlayVsPlay";
@@ -25,7 +24,6 @@ function App() {
       <Navbar />
       <Routes>
       <Route path="/" element={<HomeMenu/>}></Route>
-      <Route path="roadmap" element={<RoadMap />}></Route>
       <Route path="leaderboard" element={<LeaderBoard />}></Route>
       <Route path="play" element={<TacticSession />}></Route>
       <Route path="playvs" element={<PlayVsPlay/>}></Route>
