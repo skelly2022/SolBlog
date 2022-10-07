@@ -60,7 +60,6 @@ const TacticSession = () => {
           /*
            * Set the user's publicKey in state to be used later!
            */
-
         }
       } else {
         alert("Solana object not found! Get a Phantom Wallet 👻");
@@ -97,7 +96,7 @@ const TacticSession = () => {
     setTactic(data);
     setInterval(() => {
       setLoading(false);
-    }, 3000);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -144,8 +143,8 @@ const TacticSession = () => {
       const iD = x.score._id;
       localStorage.removeItem("id");
       localStorage.setItem("id", iD);
-     const wallet = window.localStorage.getItem("wallet").substring(0,5);
-     console.log(wallet);
+      const wallet = window.localStorage.getItem("wallet").substring(0, 5);
+      console.log(wallet);
 
       const currentScore = x.score.highScore;
       setWalletAddress(wallet);
@@ -172,21 +171,20 @@ const TacticSession = () => {
       audio.pause();
     }, 800);
 
-if (score > tactic.elo){
-  const newScore = +score + +5;
-    SetScore(newScore);
-    postScore(newScore);
-    await getPuzzle();
-    setKey(Date.now());
-}
-else {
-  const newScore = +score + +10;
-  SetScore(newScore);
-  postScore(newScore);
-  await getPuzzle();
-  setKey(Date.now());
-}
-  };
+    if (score > tactic.elo) {
+      const newScore = +score + +5;
+      SetScore(newScore);
+      postScore(newScore);
+      await getPuzzle();
+      setKey(Date.now());
+    } else {
+      const newScore = +score + +10;
+      SetScore(newScore);
+      postScore(newScore);
+      await getPuzzle();
+      setKey(Date.now());
+    }
+  }
 
   async function correctFunction() {
     let audio = new Audio(chessmove);
@@ -211,24 +209,21 @@ else {
   return (
     <>
       {loading ? (
-        <div className="loader-wrapper">
-          <div className="loader">
-            <div className="loader loader-inner"></div>
+        <div className="loading-wrapper">
+          <div className="spinner-border" >
           </div>
         </div>
       ) : (
         <>
           <Container className="mainContainer">
-
-                <TacticBoard
-                  key={key}
-                  tactic={tactic}
-                  boardWidth={chessboardSize}
-                  onCorrect={correctFunction}
-                  onIncorrect={incorrectFunction}
-                  onSolve={solutionFunction}
-                />
-            
+            <TacticBoard
+              key={key}
+              tactic={tactic}
+              boardWidth={chessboardSize}
+              onCorrect={correctFunction}
+              onIncorrect={incorrectFunction}
+              onSolve={solutionFunction}
+            />
 
             <Col className="chessHeader">
               <Card className="cardShadow">

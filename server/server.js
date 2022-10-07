@@ -5,8 +5,6 @@ const path = require("path");
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
-var Chess = require('chess.js').Chess;
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 const server = new ApolloServer({
@@ -17,17 +15,13 @@ const server = new ApolloServer({
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-if (process.env.NODE_ENV) {
-  //static folder add
-  app.use(express.static("app/client/build"));
-  app.get("*", function (req, res) {
-    res.sendFile(path.resolve(__dirname, "app/client/build", "index.html"));
-  });
-}
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {
@@ -43,36 +37,6 @@ const startApolloServer = async (typeDefs, resolvers) => {
     });
   });
 };
-const http = require("http");
-const { Server } = require("socket.io");
-const cors = require("cors");
-app.use(cors());
-const socketServer = http.createServer(app);
-
-const io = new Server(socketServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["content-type"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
-
-  socket.on("join_room", (data) => {
-    socket.join(data);
-  });
-
-  socket.on("send_message", (data) => {
-    console.log(data);
-    socket.to(data.room).emit("receive_message", data);
-  });
-});
-
-socketServer.listen(5001, () => {
-  console.log("server is running");
-});
 
 // Call the async function to start the server
 startApolloServer(typeDefs, resolvers);

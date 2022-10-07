@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import { Chessboard } from "react-chessboard";
 import qs from "qs";
 
-const socket = io.connect("http://localhost:5001");
+const socket = io.connect("https://solchess-app-server.herokuapp.com/");
 
 export default function PlayVsRandom(props) {
   const room = props.room;

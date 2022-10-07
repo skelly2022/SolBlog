@@ -16,7 +16,6 @@ import Board from "./Board";
 import io from "socket.io-client";
 import JoinGame from "../sub/joinRoomLogic/JoinGame";
 
-// const socket = io.connect("http://localhost:5001");
 
 const randomIntFromInterval = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1) + min);

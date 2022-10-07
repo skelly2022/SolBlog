@@ -24,9 +24,9 @@ function App() {
       <Navbar />
       <Routes>
       <Route path="/" element={<HomeMenu/>}></Route>
-      <Route path="leaderboard" element={<LeaderBoard />}></Route>
-      <Route path="play" element={<TacticSession />}></Route>
-      <Route path="playvs" element={<PlayVsPlay/>}></Route>
+      <Route path="/leaderboard" element={<LeaderBoard />}></Route>
+      <Route path="/play" element={<TacticSession />}></Route>
+      <Route path="/playvs" element={<PlayVsPlay/>}></Route>
  
   </Routes>
   
