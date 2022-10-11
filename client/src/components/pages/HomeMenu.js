@@ -6,6 +6,8 @@ import { QUERY_SCORES } from "../../utils/queries";
 // import ScoreList from "../components/ScoreList";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../../utils/mutations";
+import { ADD_ROOM } from "../../utils/mutations";
+import { START_GAME } from "../../utils/mutations";
 import { Link, Navigate } from "react-router-dom";
 import * as BsIcons from "react-icons/bs";
 import * as FaIcons from "react-icons/fa";
@@ -15,13 +17,15 @@ import PlayVsPlay from "./PlayVsPlay";
 import Board from "./Board";
 import io from "socket.io-client";
 import JoinGame from "../sub/joinRoomLogic/JoinGame";
-
+// import { QUERY_ROOM } from "../../utils/queries";
 
 const randomIntFromInterval = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 const rndInt = randomIntFromInterval(1, 1000);
+// const socket = io.connect("https://solchess-app-server.herokuapp.com/");
+const socket = io.connect("https://solchess-app-server.herokuapp.com/");
 
 const HomeMenu = () => {
   // State
@@ -40,36 +44,30 @@ const HomeMenu = () => {
   const scores = data?.scores || [];
 
   const [addUser, { error }] = useMutation(ADD_USER);
+  const [addRoom, { startData }] = useMutation(ADD_ROOM, {
+    onCompleted: (startData) => {
+      setGameTime(startData.addRoom.room.roomTime);
+      setColor(startData.addRoom.room.roomColor);
+    },
+  });
+  // const [startGame] = useMutation(START_GAME);
+  const [startGame, { gameData }] = useMutation(START_GAME, {
+    onCompleted: (gameData) => {
+      // console.log(gameData.startGame);
+      if (gameData.startGame === null) {
+        setGame(2);
+      } else {
+        console.log(gameData.startGame);
+        setGameTime(gameData.startGame.roomTime);
 
-  //socket
-
-  // Actions
-  // const checkIfWalletIsConnected = async () => {
-  //   try {
-  //     const { solana } = window;
-
-  //     if (solana) {
-  //       if (solana.isPhantom) {
-  //         console.log("Phantom wallet found!");
-  //         const response = await solana.connect({ onlyIfTrusted: true });
-  //         console.log(
-  //           "Connected with Public Key:",
-  //           response.publicKey.toString()
-  //         );
-
-  //         /*
-  //          * Set the user's publicKey in state to be used later!
-  //          */
-  //         setWalletAddress(response.publicKey.toString());
-
-  //       }
-  //     } else {
-  //       alert("Solana object not found! Get a Phantom Wallet 👻");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+        if (gameData.startGame.roomColor === "white") {
+          setColor("black");
+        } else {
+          setColor("white");
+        }
+      }
+    },
+  });
 
   const connectWallet = async () => {
     const { solana } = window;
@@ -97,6 +95,19 @@ const HomeMenu = () => {
     try {
       const { data } = await addUser({
         variables: { ...adding },
+      });
+    } catch (err) {
+      if (err) throw err.message;
+      console.log(err.message);
+    }
+  };
+
+  const createRoom = async (x) => {
+    console.log(x);
+
+    try {
+      const { data } = await addRoom({
+        variables: { ...x },
       });
     } catch (err) {
       if (err) throw err.message;
@@ -133,12 +144,8 @@ const HomeMenu = () => {
     </div>
   );
 
-  const start = "play";
-  const join = "join";
-
-  const startGame = () => {
+  const letsGame = () => {
     setGame(1);
-
   };
   const joinGame = () => {
     setGame(2);
@@ -150,23 +157,45 @@ const HomeMenu = () => {
 
   const submit = () => {
     const time = document.getElementById("time");
-    var gameTime = time.value;
+    const gameTime = time.value;
     const color = document.getElementById("color");
-    var gameColor = color.value;
-    setGameTime(gameTime);
-    setColor(gameColor);
+    const gameColor = color.value;
+
     setGame(3);
     const room = randomIntFromInterval(1, 1000);
+    const roomString = room.toString();
     setRoom(room);
+    const roomVariables = {
+      wallet: walletAddress,
+      roomNumber: roomString,
+      roomTime: gameTime,
+      roomColor: gameColor,
+    };
+    createRoom(roomVariables);
   };
 
+  const sGame = async (x) => {
+    try {
+      const { gameData } = await startGame({
+        variables: { ...x },
+      });
+    } catch (err) {
+      if (err) throw err.message;
+      console.log(err.message);
+    }
+  };
 
   const joinRoom = () => {
-    const roomnumber = document.getElementById("roomnumber");
-    var room = parseInt(roomnumber.value);
+    const roomNumber = document.getElementById("roomnumber");
+    var room = parseInt(roomNumber.value).toString();
+
+    var work = { roomNumber: room };
+    sGame(work);
+
+    var room = parseInt(roomNumber.value);
+
     setRoom(room);
     setGame(3);
-   
   };
 
   const renderPuzzlePlay = () => (
@@ -178,7 +207,7 @@ const HomeMenu = () => {
         </Link>
         <h1>Play vs Friend</h1>
         <div className="choice-container">
-          <button className={`btn btn-primary`} onClick={startGame}>
+          <button className={`btn btn-primary`} onClick={letsGame}>
             Start New
           </button>
           <button className={`btn btn-secondary`} onClick={joinGame}>
@@ -197,12 +226,6 @@ const HomeMenu = () => {
           <h4 className="leaderboard2">LeaderBoard</h4>
         </Link>
       </div>
-    </div>
-  );
-
-  const renderPlayVsPlay = () => (
-    <div className="games">
-      <form></form>
     </div>
   );
 
@@ -240,8 +263,13 @@ const HomeMenu = () => {
   if (game === 3) {
     return (
       <div className="body">
-        {console.log(room)}
-    <PlayVsPlay room={room}/>
+        <PlayVsPlay
+          room={room}
+          socket={socket}
+          walletAddress={walletAddress}
+          gameColor={gameColor}
+          gameTime={gameTime}
+        />
       </div>
     );
   }

@@ -28,4 +28,29 @@ export const ADD_USER = gql`
       }
     }
   }
+
+  
+`
+
+export const ADD_ROOM = gql`
+mutation AddRoom($wallet: String!, $roomNumber: String!, $roomTime: String!, $roomColor: String!) {
+  addRoom(wallet: $wallet, roomNumber: $roomNumber, roomTime: $roomTime, roomColor: $roomColor) {
+    room {
+      roomNumber
+      roomTime
+      roomColor
+      users
+    }
+  }
+}
+`
+export const START_GAME = gql`
+mutation StartGame($roomNumber: String!) {
+  startGame(roomNumber: $roomNumber) {
+    roomNumber
+    roomTime
+    roomColor
+    users
+  }
+}
 `;

@@ -64,8 +64,8 @@ const submit = props.submit;
               <Form.Group className="mb-3" controlId="2">
                 <Form.Label>Color</Form.Label>
                 <Form.Select id="color">
-                  <option value="1">White</option>
-                  <option value="2">Black</option>
+                  <option value="white">White</option>
+                  <option value="black">Black</option>
                 </Form.Select>
               </Form.Group>
             </Form>

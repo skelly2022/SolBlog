@@ -1,14 +1,18 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Chess from "chess.js";
+import Chess, { BLACK } from "chess.js";
 import io from "socket.io-client";
 import { Chessboard } from "react-chessboard";
 import qs from "qs";
 
-const socket = io.connect("https://solchess-app-server.herokuapp.com/");
+// const socket = io.connect("");
+// const socket = io.connect("http://localhost:5001");
+
 
 export default function PlayVsRandom(props) {
   const room = props.room;
+  const socket = props.socket;
+  const gameSide = props.gameColor.toString();
   const chessboardRef = useRef();
   const [game, setGame] = useState(new Chess());
   const [arrows, setArrows] = useState([]);
@@ -19,6 +23,12 @@ export default function PlayVsRandom(props) {
   const [newSourceSquare, setNewSourceSquare] = useState("");
   const [newTargetSquare, setNewTargetSquare] = useState("");
   // const [room, setRoom] = useState(room);
+
+  if (gameSide === 2){
+    setBoardOrientation((currentOrientation) =>
+    currentOrientation === "white" ? "black" : "white"
+  );
+  }
 
   function safeGameMutate(modify) {
     setGame((g) => {
@@ -42,8 +52,8 @@ export default function PlayVsRandom(props) {
   }
 
   function onDrop(sourceSquare, targetSquare) {
-    console.log(sourceSquare);
-    console.log(targetSquare);
+    // console.log(sourceSquare);
+    // console.log(targetSquare);
     const gameCopy = { ...game };
     const move = gameCopy.move({
       from: sourceSquare,
@@ -95,7 +105,7 @@ export default function PlayVsRandom(props) {
       <Chessboard
         id="PlayVsRandom"
         animationDuration={200}
-        boardOrientation={boardOrientation}
+        boardOrientation={gameSide}
         customArrows={arrows}
         position={game.fen()}
         onPieceDrop={onDrop}
