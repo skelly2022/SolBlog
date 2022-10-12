@@ -1,0 +1,77 @@
+
+* {
+    box-sizing: border-box;
+  }
+  
+  .lobbyhome {
+    height: 100vh;
+    background-color: #141141;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  
+  }
+
+  .lobbyheader2 {
+    color: white;
+    height: 47px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+}
+
+.leaderboardoptions {
+   display: flex;
+   flex-direction: row;
+   padding-left: 20px;
+   justify-content: center;
+
+}
+
+.leaderboard1 {
+  padding-right: 50px;
+}
+
+.lobbyfeature {
+    height: 200px; 
+   margin-top: 10px;
+    width: 100%; 
+    display: flex;
+   flex-direction: column;
+   
+  }
+
+  .lobbydiv {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+  }
+
+  .lobby{
+    -webkit-transform: translate(0%, 0%);
+  transform: translate(0%, 0%);
+  width: 80%;
+  height: 70vh;
+  background: -webkit-linear-gradient(top, #3a404d, #181c26);
+  background: linear-gradient(to bottom, #3a404d, #181c26);
+  border-radius: 10px;
+  box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
+  overflow-x: hidden;
+    
+  }
+  
+  .table {
+    margin:auto auto;
+    text-align:center;
+    /* background-color:whitesmoke;     */
+    /* border-collapse: separate; */
+    /* border: 2px solid black; */
+  }
+
+  .lobbyRow {
+    height: 70px;
+  }

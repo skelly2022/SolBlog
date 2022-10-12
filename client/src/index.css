@@ -152,6 +152,7 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 .loading-wrapper .spinner-border {
   width: 5rem;
@@ -159,6 +160,11 @@ code {
   color: #eff1f5;
   border-width: 8px;
   border-right-color: #007ae1;
+}
+
+.loader-h1{
+  color: white;
+  margin-bottom: 30px;
 }
 
 .help {

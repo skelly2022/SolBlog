@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "../css/HomePage.css";
 import { useQuery } from "@apollo/client";
 import { QUERY_SCORES } from "../../utils/queries";
-// import { QUERY_SCORE } from "../utils/queries";
-// import ScoreList from "../components/ScoreList";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../../utils/mutations";
 import { ADD_ROOM } from "../../utils/mutations";
@@ -17,14 +15,12 @@ import PlayVsPlay from "./PlayVsPlay";
 import Board from "./Board";
 import io from "socket.io-client";
 import JoinGame from "../sub/joinRoomLogic/JoinGame";
-// import { QUERY_ROOM } from "../../utils/queries";
 
 const randomIntFromInterval = (max, min) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 const rndInt = randomIntFromInterval(1, 1000);
-// const socket = io.connect("https://solchess-app-server.herokuapp.com/");
 const socket = io.connect("https://solchess-app-server.herokuapp.com/");
 
 const HomeMenu = () => {
@@ -47,7 +43,7 @@ const HomeMenu = () => {
   const [addRoom, { startData }] = useMutation(ADD_ROOM, {
     onCompleted: (startData) => {
       setGameTime(startData.addRoom.room.roomTime);
-      setColor(startData.addRoom.room.roomColor);
+      setColor(startData.addRoom.room.roomColor.toString());
     },
   });
   // const [startGame] = useMutation(START_GAME);
@@ -174,10 +170,10 @@ const HomeMenu = () => {
     createRoom(roomVariables);
   };
 
-  const sGame = async (x) => {
+  const sGame = async (wallet2) => {
     try {
       const { gameData } = await startGame({
-        variables: { ...x },
+        variables: { ...wallet2 },
       });
     } catch (err) {
       if (err) throw err.message;
@@ -189,7 +185,7 @@ const HomeMenu = () => {
     const roomNumber = document.getElementById("roomnumber");
     var room = parseInt(roomNumber.value).toString();
 
-    var work = { roomNumber: room };
+    var work = { roomNumber: room, wallet2: walletAddress };
     sGame(work);
 
     var room = parseInt(roomNumber.value);

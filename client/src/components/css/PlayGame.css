@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box;
+}
+
+.gameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 200px;
+  height: 89%;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1;
+}
+
+.walletContainer {
+  height: 80px;
+  width: 600px;
+  display: flex;
+  background-color: #060b26;
+ justify-content: center;
+ align-items: center;
+
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .chessHeader {
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .gameContainer {
+    flex-direction: column;
+  }
+
+  .list-group {
+    flex-direction: row !important;
+  }
+
+  .list-group-item {
+    padding: 3px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .chessHeader {
+    flex-grow: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .gameContainer {
+    flex-direction: column;
+  }
+
+  .list-group {
+    flex-direction: row !important;
+  }
+
+  .list-group-item {
+    padding: 3px !important;
+  }
+}

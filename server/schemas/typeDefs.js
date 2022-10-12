@@ -6,28 +6,36 @@ const typeDefs = gql`
     wallet: String
     highScore: String
     createdAt: String
-    comments: [Comment]!
+  }
+  type Room {
+    _id: ID
+    wallet: String
+    roomNumber: String
+    roomTime: String
+    roomColor: String
+    wallet2:String
+    users:String
   }
 
   type Auth {
     token: ID!
     user: Score
-  }
-
-  type Comment {
-    _id: ID
-    commentText: String
-    createdAt: String
+    room: Room
   }
 
   type Query {
     scores: [Score]!
     score(wallet: String!): Score
+    rooms: [Room]!
+    room(roomNumber: String!): Room
+ 
   }
 
   type Mutation {
     createVote(_id: String!,elo:String!): Score
     addUser(wallet: String!): Auth
+    addRoom(wallet: String!, roomNumber: String!, roomTime: String!, roomColor: String! ): Auth
+    startGame(roomNumber:String!, wallet2: String!): Room
   }
 `;
 

@@ -18,3 +18,26 @@ export const QUERY_SCORE = gql`
     }
   }
 `;
+
+export const QUERY_ROOM = gql`
+query Query($roomNumber: String!) {
+  room(roomNumber: $roomNumber) {
+    wallet
+    roomNumber
+    roomTime
+    roomColor
+    wallet2
+    users
+  }
+}
+`
+export const QUERY_ROOMS = gql`
+query Rooms {
+  rooms {
+    wallet
+    roomNumber
+    roomTime
+    roomColor
+  }
+}
+`;

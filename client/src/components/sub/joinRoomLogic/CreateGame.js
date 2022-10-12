@@ -25,24 +25,6 @@ const submit = props.submit;
 
   const [messageRecieved, setMessageRecieved] = useState("");
 
-
-  // const joinRoom = () => {
-  //   if (room !== "") {
-  //     socket.emit("join_room", room);
-  //   }
-  // };
-
-  // const sendMessage = () => {
-  //   socket.emit("send_message", { message, room });
-  // };
-
-  // useEffect(() => {
-  //   socket.on("receive_message", (data) => {
-  //     setMessageRecieved(data.message);
-  //   });
-  //   // eslint-disable-next-line
-  // }, [socket]);
-
   return (
     <>
       <div className="createGame">

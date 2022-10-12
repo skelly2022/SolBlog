@@ -2,6 +2,7 @@ import HomeMenu from "./components/pages/HomeMenu";
 import PlayVsPlay from "./components/pages/PlayVsPlay";
 import LeaderBoard from "./components/pages/LeaderBoard"
 import TacticSession from "./components/pages/TacticSession";
+import Lobby from "./components/pages/Lobby";
 // import PlayVsPlay from "./components/PlayVsPlay";
 // import { Routes, Route, Router  } from "react-router-dom";
 import Navbar from "./components/sub/NavBar";
@@ -25,6 +26,7 @@ function App() {
       <Routes>
       <Route path="/" element={<HomeMenu/>}></Route>
       <Route path="/leaderboard" element={<LeaderBoard />}></Route>
+      <Route path="/lobby" element={<Lobby />}></Route>
       <Route path="/play" element={<TacticSession />}></Route>
       <Route path="/playvs" element={<PlayVsPlay/>}></Route>
  

@@ -23,6 +23,48 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
+// const socketapp = express();
+
+// const http = require("http");
+
+// const { Server } = require("socket.io");
+// const cors = require("cors");
+// socketapp.use(cors());
+// const socketserver = http.createServer(app);
+// const socketPORT = 5001;
+
+
+// socketapp.get('/',(req,res) => {
+//   res.write(`<h1>Socket IO Start on Port : ${PORT} </h1>`);
+// });
+
+// const io = new Server(socketserver, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST"],
+//   },
+// });
+
+// io.on("connection", (socket) => {
+// console.log(`User Connected: ${socket.id}`);
+
+// socket.on("join_room", (data) => {
+//   console.log(data);
+//     socket.join(data.room);
+//     socket.broadcast.to(data.room).emit("player_joined", data.walletAddress);
+// })
+
+// socket.on("send_message", (data) => {
+//   console.log(data);
+//   socket.broadcast.to(data.room).emit("receive_message", data);
+// });
+
+// });
+
+// socketserver.listen(socketPORT, () => {
+//     console.log("server is running");
+// });
+
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();

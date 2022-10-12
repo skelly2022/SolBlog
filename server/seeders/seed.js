@@ -1,10 +1,10 @@
 const db = require('../config/connection');
-const { Score } = require('../models');
+const { Room } = require('../models');
 const scoreSeeds = require('./scoreseeds.json');
 
 db.once('open', async () => {
-  await Score.deleteMany({});
-  await Score.create(scoreSeeds);
+  await Room.deleteMany({});
+ 
 
   console.log('all done!');
   process.exit(0);
