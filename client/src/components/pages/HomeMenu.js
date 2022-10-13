@@ -258,7 +258,7 @@ const HomeMenu = () => {
   }
   if (game === 3) {
     return (
-      <div className="body">
+    
         <PlayVsPlay
           room={room}
           socket={socket}
@@ -266,7 +266,7 @@ const HomeMenu = () => {
           gameColor={gameColor}
           gameTime={gameTime}
         />
-      </div>
+   
     );
   }
 };
