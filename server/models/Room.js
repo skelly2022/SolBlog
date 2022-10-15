@@ -25,11 +25,11 @@ const roomSchema = new Schema({
     minlength: 1,
     maxlength: 280,
     trim: true,
-    default: "Waiting"
+    default: "Waiting",
   },
-  users: {
+  elo: {
     type: Number,
-    default: 1,
+    default: 1200,
   },
 
   createdAt: {

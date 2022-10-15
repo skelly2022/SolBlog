@@ -12,6 +12,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_SCORE } from "../../utils/queries";
 import { CREATE_VOTE } from "../../utils/mutations";
 
+
 const TacticSession = () => {
   const [chessboardSize, setChessboardSize] = useState(500);
   const [key, setKey] = useState(Date.now());

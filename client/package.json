@@ -14,7 +14,7 @@
     "axios": "^0.26.1",
     "chess.js": "^0.12.1",
     "cors": "^2.8.5",
-    "socket.io-client": "^4.5.2",
+    "elo-rating": "^1.0.1",
     "express": "^4.17.3",
     "graphql": "^15.8.0",
     "nodejs": "^0.0.0",
@@ -26,6 +26,7 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "socket.io-client": "^4.5.2",
     "use-state-if-mounted": "^1.0.4",
     "web-vitals": "^2.1.4"
   },

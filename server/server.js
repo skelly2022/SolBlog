@@ -49,9 +49,22 @@ app.get('*', (req, res) => {
 // console.log(`User Connected: ${socket.id}`);
 
 // socket.on("join_room", (data) => {
-//   console.log(data);
-//     socket.join(data.room);
-//     socket.broadcast.to(data.room).emit("player_joined", data.walletAddress);
+//   // console.log(data);
+//     // socket.join(data.room);
+//     // socket.broadcast.to(data.room).emit("player_joined", data);
+//     let rooms = io.sockets.adapter.rooms;
+//     let room = rooms.get(data.room);
+//   if (room == undefined){
+//       socket.join(data.room);
+//       socket.broadcast.to(data.room).emit("player_joined", data);
+//       console.log("hey");}
+//   else if (room.size == 1){
+//       socket.join(data.room);
+//       socket.to(data.room).emit("player_joined", data);
+//       console.log(room.size)
+//   }
+//   else if (room.size == 2){
+// console.log('hey')  }
 // })
 
 // socket.on("send_message", (data) => {

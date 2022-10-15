@@ -5,6 +5,8 @@ const typeDefs = gql`
     _id: ID
     wallet: String
     highScore: String
+    elo: String
+    userName:String
     createdAt: String
   }
   type Room {
@@ -14,7 +16,7 @@ const typeDefs = gql`
     roomTime: String
     roomColor: String
     wallet2:String
-    users:String
+    elo:String
   }
 
   type Auth {
@@ -26,6 +28,7 @@ const typeDefs = gql`
   type Query {
     scores: [Score]!
     score(wallet: String!): Score
+    scoresElo: [Score]!
     rooms: [Room]!
     room(roomNumber: String!): Room
  
@@ -33,9 +36,11 @@ const typeDefs = gql`
 
   type Mutation {
     createVote(_id: String!,elo:String!): Score
-    addUser(wallet: String!): Auth
-    addRoom(wallet: String!, roomNumber: String!, roomTime: String!, roomColor: String! ): Auth
-    startGame(roomNumber:String!, wallet2: String!): Room
+    addUser(wallet: String!): Score!
+    addUserName(wallet: String!, userName:String!): Score!
+    addRoom(wallet: String!, roomNumber: String!, roomTime: String!, roomColor: String! elo: String!  ): Auth
+    startGame(roomNumber:String!, wallet2: String!): Room!
+    updateElo(wallet: String!,elo:String! wallet2: String!, wallet2elo:String!): Score
   }
 `;
 

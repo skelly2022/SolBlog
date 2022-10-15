@@ -14,6 +14,17 @@ const scoreSchema = new Schema({
     default: 1200,
     
   },
+  elo: {
+    type: Number,
+    default: 1200,
+    
+  },
+
+  userName: {
+    type: String,
+    default: "No Username"
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

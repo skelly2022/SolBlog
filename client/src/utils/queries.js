@@ -6,7 +6,18 @@ export const QUERY_SCORES = gql`
       _id
       wallet
       highScore
+      elo
       createdAt
+    }
+  }
+`;
+
+export const QUERY_SCORESELO = gql`
+  query getScoresElo {
+      scoresElo {
+        elo
+      wallet
+      userName
     }
   }
 `;
@@ -14,7 +25,11 @@ export const QUERY_SCORE = gql`
   query score($wallet: String!) {
     score(wallet: $wallet) {
       _id
+      wallet
+      userName
       highScore
+      elo
+      createdAt
     }
   }
 `;
@@ -27,7 +42,7 @@ query Query($roomNumber: String!) {
     roomTime
     roomColor
     wallet2
-    users
+    elo
   }
 }
 `

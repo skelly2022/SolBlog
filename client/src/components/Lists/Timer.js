@@ -40,7 +40,6 @@ function Timer(props) {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Timer:</h1>
       <h3 style={{ padding: "5px" }}>{`${mins
         .toString()
         .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`}</h3>

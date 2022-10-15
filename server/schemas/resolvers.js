@@ -8,6 +8,10 @@ const resolvers = {
       return Score.find().sort({ highScore: -1 });
     },
 
+    scoresElo: async () => {
+      return Score.find().sort({ elo: -1 });
+    },
+
     score: async (parent, { wallet }) => {
       return Score.findOne({ wallet: wallet });
     },
@@ -38,20 +42,32 @@ const resolvers = {
       } else {
         const user = await Score.create({ wallet });
         const token = signToken(user);
-        return { token, user };
+        return user;
       }
     },
-    addRoom: async (parent, { wallet, roomNumber, roomTime, roomColor }) => {
+    addUserName: async (parent, { wallet, userName }) => {
       // First we create the user
-      console.log(wallet, roomNumber, roomTime, roomColor);
+      const newUserName = await Score.findOneAndUpdate(
+        { wallet: wallet },
+        { $set: { userName: userName } },
+        { new: true }
+      );
+      return newUserName
+    },
+    addRoom: async (
+      parent,
+      { wallet, roomNumber, roomTime, roomColor, elo }
+    ) => {
+      // First we create the user
+
       const room = await Room.create({
         wallet,
         roomNumber,
         roomTime,
         roomColor,
+        elo,
       });
       const token = signToken(room);
-      console.log(room);
       return { room };
     },
     startGame: async (parent, { roomNumber, wallet2 }) => {
@@ -64,13 +80,26 @@ const resolvers = {
       if (vote.wallet2 === "Waiting") {
         const help = await Room.findOneAndUpdate(
           { roomNumber: roomNumber },
-          { $set:{wallet2: wallet2}},
+          { $set: { wallet2: wallet2 } },
           { new: true }
         );
         return help;
       } else {
-        return null;
+        return false;
       }
+    },
+    updateElo: async (parent, { wallet, elo, wallet2, wallet2elo }) => {
+      const myElo = await Score.findOneAndUpdate(
+        { wallet: wallet },
+        { $set: { [`elo`]: elo } },
+        { new: true }
+      );
+      const opponentElo = await Score.findOneAndUpdate(
+        { wallet: wallet2 },
+        { $set: { [`elo`]: wallet2elo } },
+        { new: true }
+      );
+      return myElo & opponentElo;
     },
   },
 };

@@ -7,24 +7,27 @@ import Timer from "../Lists/Timer";
 import TimerMe from "../Lists/TimerMe";
 import { QUERY_ROOM } from "../../utils/queries";
 import { useGameState, useGameUpdateState } from "../../utils/GameContext";
-import { Modal } from "react-bootstrap";
+import chessmove from "../audio/chessmove.wav";
+import { UPDATE_ELO } from "../../utils/mutations";
 
 // const socket = io.connect("");
 // const socket = io.connect("http://localhost:5001");
 
 export default function PlayVsRandom(props) {
+  const EloRating = require("elo-rating");
   const gameTime = props.gameTime;
+  const elo = props.elo;
   const room = props.room;
-  const roomString = { roomNumber: props.room.toString() };
+  const score2 = props.score;
+  const wallet2elo = props.OpponentElo;
+  const roomString = { roomNumber: room.toString() };
   const socket = props.socket;
   const gameSide = props.gameColor;
   const walletAddress = props.walletAddress;
-
   const { gameOver } = useGameState(false);
   const { updateGameOver } = useGameUpdateState();
   const { updateShow } = useGameUpdateState();
   const { show } = useGameState();
-
   const [pause, setPause] = useState(false);
   const [thisGameTime, setGameTime] = useState(3);
   const [mePause, setMePause] = useState(true);
@@ -36,16 +39,14 @@ export default function PlayVsRandom(props) {
   const [lose, setLose] = useState(null);
   const [turn, setTurn] = useState(false);
   const [wallet, setWallet] = useState("");
-  const [wallet2, setWallet2] = useState("Loading...");
+  const [wallet2, setWallet2] = useState("");
+  const [eloState, setEloState] = useState(false);
+  const [wallet2Elo, setWallet2Elo] = useState("Loading...");
+  const [wallet1Elo, setWallet1Elo] = useState(elo);
+  const [wallet2NewElo, setWallet2NewElo] = useState("Loading...");
+  const [wallet1NewElo, setWallet1NewElo] = useState("Loading...");
 
-  console.log(gameOver);
-  console.log(show);
-  const { loading, data } = useQuery(QUERY_ROOM, {
-    fetchPolicy: "no-cache",
-    variables: { ...roomString },
-  });
-
-  const playData = data?.room;
+  const [updateWinnerElo, { error }] = useMutation(UPDATE_ELO);
 
   function safeGameMutate(modify) {
     setGame((g) => {
@@ -59,6 +60,28 @@ export default function PlayVsRandom(props) {
 
   const renderWin = () => <h1>You Win!!</h1>;
 
+  const postScore = async (playerWin) => {
+    const result = EloRating.calculate(+elo, +wallet2Elo, playerWin);
+    const newScore = result.playerRating;
+    const newOpponentScore = result.opponentRating;
+    const updateS = {
+      wallet: walletAddress,
+      elo: newScore.toString(),
+      wallet2: wallet2,
+      wallet2Elo: newOpponentScore.toString(),
+    };
+    try {
+      const { data } = await updateWinnerElo({
+        variables: { ...updateS },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    setWallet1NewElo(newScore);
+    setWallet2NewElo(newOpponentScore);
+    setEloState(true);
+  };
+
   function onDrop(sourceSquare, targetSquare) {
     if (turn === true) {
       const gameCopy = { ...game };
@@ -71,25 +94,20 @@ export default function PlayVsRandom(props) {
       if (move === null) return false;
 
       setGame(gameCopy);
-      console.log(gameCopy.in_checkmate(gameCopy));
 
       if (gameCopy.in_checkmate(gameCopy) === true) {
+        var playerWin = true;
+        postScore(playerWin);
         sendMove(sourceSquare, targetSquare);
         setWin(true);
         setPause(true);
         setMePause(true);
         return true;
       }
-
-      // illegal move
-      // store timeout so it can be cleared on undo/reset so computer doesn't execute move
-      // const newTimeout = setTimeout(makeRandomMove, 200);
-      // setCurrentTimeout(newTimeout);
       else {
         setTurn(false);
         setMePause(true);
         setPause(false);
-        console.log(targetSquare);
         sendMove(sourceSquare, targetSquare);
         return true;
       }
@@ -98,7 +116,7 @@ export default function PlayVsRandom(props) {
     }
   }
 
-  function onDrop2(sourceSquare, targetSquare) {
+  function onDrop2(sourceSquare, targetSquare, oElo) {
     const gameCopy = { ...game };
     const move = gameCopy.move({
       from: sourceSquare,
@@ -107,8 +125,22 @@ export default function PlayVsRandom(props) {
     });
 
     setGame(gameCopy);
+    let audio = new Audio(chessmove);
+    audio.play();
 
     if (gameCopy.in_checkmate(gameCopy) === true) {
+      console.log(oElo);
+
+      const playerWin = false;
+      const result = EloRating.calculate(+elo, +oElo, playerWin);
+      console.log(result);
+      const newScore = result.playerRating;
+      const newOpponentScore = result.opponentRating;
+
+      console.log(newScore, newOpponentScore);
+      setWallet1NewElo(newScore);
+      setWallet2NewElo(newOpponentScore);
+      setEloState(true);
       setPause(true);
       setMePause(true);
       setLose(true);
@@ -124,15 +156,19 @@ export default function PlayVsRandom(props) {
 
   const joinRoom = () => {
     if (room !== "") {
-      socket.emit("join_room", { room, walletAddress });
+      socket.emit("join_room", { room, walletAddress, elo });
     }
+  };
+
+  const sendMove = (sourceSquare, targetSquare) => {
+    socket.emit("send_message", { sourceSquare, targetSquare, room, elo });
   };
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setTurn(true);
 
-      onDrop2(data.sourceSquare, data.targetSquare);
+      onDrop2(data.sourceSquare, data.targetSquare, data.elo);
       return;
     });
     // eslint-disable-next-line
@@ -140,13 +176,13 @@ export default function PlayVsRandom(props) {
 
   useEffect(() => {
     socket.on("player_joined", (data) => {
-      // console.log(data);
-      setWallet2(data);
+      setWallet2(data.walletAddress);
+      setWallet2Elo(data.elo);
       setscore(1);
       return;
     });
     // eslint-disable-next-line
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     if (gameSide === "white") {
@@ -160,16 +196,18 @@ export default function PlayVsRandom(props) {
   }, [gameSide]);
 
   useEffect(() => {
-    joinRoom();
-  });
+    socket.emit("join_room", { room, walletAddress, elo });
+    return;
+  },[]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setGameTime(gameTime);
-  }, [gameTime]);
-
-  const sendMove = (sourceSquare, targetSquare) => {
-    socket.emit("send_message", { sourceSquare, targetSquare, room });
-  };
+    if (score2 === 1) {
+      setscore(1);
+      setWallet2Elo(wallet2elo);
+      setWallet2(props.OpponentWallet);
+    }
+  });// eslint-disable-line react-hooks/exhaustive-deps
 
   if (score === 0) {
     return (
@@ -190,12 +228,22 @@ export default function PlayVsRandom(props) {
     );
   }
   if ((score === 1) & (gameSide === "white")) {
-    console.log(gameTime);
     return (
       <div className="gameBody">
         <div className="gameContainer container">
           <div className="walletContainer">
-            <h4>{wallet2}</h4>
+            <div className="walletElo">
+              <h6>{wallet2}</h6>
+              <h6 id="wal2">
+                {!eloState && wallet2Elo}
+                {eloState && wallet2NewElo}
+              </h6>
+            </div>
+
+            <Timer
+              time={{ hours: 0, minutes: gameTime, seconds: 0 }}
+              pause={pause}
+            />
           </div>
           <Chessboard
             id="PlayVsRandom"
@@ -211,33 +259,45 @@ export default function PlayVsRandom(props) {
             ref={chessboardRef}
           />
           <div className="walletContainer">
-            <h4>{props.walletAddress}</h4>
+            <div className="walletElo">
+              <h6>{props.walletAddress}</h6>
+              <h6>
+                {!eloState && wallet1Elo}
+                {eloState && wallet1NewElo}
+              </h6>
+            </div>
+            <TimerMe
+              time={{ hours: 0, minutes: gameTime, seconds: 0 }}
+              pause={mePause}
+            />
           </div>
         </div>
         <div className="timer">
-          <Timer
-            time={{ hours: 0, minutes: gameTime, seconds: 0 }}
-            pause={pause}
-          />
           {gameOver && renderLose()}
           {show && renderWin()}
           {win && renderWin()}
           {lose && renderLose()}
-          <TimerMe
-            time={{ hours: 0, minutes: gameTime, seconds: 0 }}
-            pause={mePause}
-          />
         </div>
       </div>
     );
   }
   if ((score === 1) & (gameSide === "black")) {
-    console.log(gameTime);
     return (
       <div className="gameBody">
         <div className="gameContainer container">
           <div className="walletContainer">
-            <h4>{wallet2}</h4>
+            <div className="walletElo">
+              <h6>{wallet2}</h6>
+              <h6 id="wal2">
+                {!eloState && wallet2Elo}
+                {eloState && wallet2NewElo}
+              </h6>
+            </div>
+
+            <Timer
+              time={{ hours: 0, minutes: gameTime, seconds: 0 }}
+              pause={pause}
+            />
           </div>
           <Chessboard
             id="PlayVsRandom"
@@ -253,22 +313,24 @@ export default function PlayVsRandom(props) {
             ref={chessboardRef}
           />
           <div className="walletContainer">
-            <h4>{props.walletAddress}</h4>
+            <div className="walletElo">
+              <h6>{props.walletAddress}</h6>
+              <h6>
+                {!eloState && wallet1Elo}
+                {eloState && wallet1NewElo}
+              </h6>
+            </div>
+            <TimerMe
+              time={{ hours: 0, minutes: gameTime, seconds: 0 }}
+              pause={mePause}
+            />
           </div>
         </div>
         <div className="timer">
-          <Timer
-            time={{ hours: 0, minutes: gameTime, seconds: 0 }}
-            pause={pause}
-          />
           {gameOver && renderLose()}
           {show && renderWin()}
           {win && renderWin()}
           {lose && renderLose()}
-          <TimerMe
-            time={{ hours: 0, minutes: gameTime, seconds: 0 }}
-            pause={mePause}
-          />
         </div>
       </div>
     );

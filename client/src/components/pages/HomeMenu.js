@@ -22,26 +22,27 @@ const randomIntFromInterval = (max, min) => {
 
 const rndInt = randomIntFromInterval(1, 1000);
 const socket = io.connect("https://solchess-app-server.herokuapp.com/");
+// const socket = io.connect("http://localhost:5001");
 
 const HomeMenu = () => {
   // State
   const [walletAddress, setWalletAddress] = useState(null);
   const [game, setGame] = useState(0);
+  const [score, setScore] = useState(0);
   const [room, setRoom] = useState();
+  const [elo, setElo] = useState();
   const [gameTime, setGameTime] = useState(0);
   const [gameColor, setColor] = useState(0);
+  const [wallet2Elo, setWallet2Elo] = useState(0);
+  const [wallet2Address, setWallet2Address] = useState(0);
 
   // console.log(gameTime, gameColor);
   const [formState, setFormState] = useState({ wallet: "" });
 
-  // const [getMyScore] = useQuery(QUERY_SCORE);
-
-  const { loading, data } = useQuery(QUERY_SCORES);
-  const scores = data?.scores || [];
-
   const [addUser, { error }] = useMutation(ADD_USER);
   const [addRoom, { startData }] = useMutation(ADD_ROOM, {
     onCompleted: (startData) => {
+
       setGameTime(startData.addRoom.room.roomTime);
       setColor(startData.addRoom.room.roomColor.toString());
     },
@@ -49,12 +50,15 @@ const HomeMenu = () => {
   // const [startGame] = useMutation(START_GAME);
   const [startGame, { gameData }] = useMutation(START_GAME, {
     onCompleted: (gameData) => {
-      // console.log(gameData.startGame);
+      console.log(gameData.startGame);
       if (gameData.startGame === null) {
         setGame(2);
       } else {
         console.log(gameData.startGame);
         setGameTime(gameData.startGame.roomTime);
+        setWallet2Address(gameData.startGame.wallet)
+        setWallet2Elo(gameData.startGame.elo);
+        setScore(1);
 
         if (gameData.startGame.roomColor === "white") {
           setColor("black");
@@ -92,19 +96,7 @@ const HomeMenu = () => {
       const { data } = await addUser({
         variables: { ...adding },
       });
-    } catch (err) {
-      if (err) throw err.message;
-      console.log(err.message);
-    }
-  };
-
-  const createRoom = async (x) => {
-    console.log(x);
-
-    try {
-      const { data } = await addRoom({
-        variables: { ...x },
-      });
+      setElo(data.addUser.elo);
     } catch (err) {
       if (err) throw err.message;
       console.log(err.message);
@@ -126,15 +118,7 @@ const HomeMenu = () => {
         </div>
 
         <div className="herofeature">
-          <Link to="/leaderboard" className="">
-            <BsIcons.BsTwitter size={50} />
-          </Link>
-          <Link to="/leaderboard" className="">
-            <FaIcons.FaDiscord size={50} />
-          </Link>
-          <Link to="/leaderboard" className="btn2">
-            <h4 className="leaderboard2">LeaderBoard</h4>
-          </Link>
+
         </div>
       </div>
     </div>
@@ -156,7 +140,6 @@ const HomeMenu = () => {
     const gameTime = time.value;
     const color = document.getElementById("color");
     const gameColor = color.value;
-
     setGame(3);
     const room = randomIntFromInterval(1, 1000);
     const roomString = room.toString();
@@ -166,8 +149,21 @@ const HomeMenu = () => {
       roomNumber: roomString,
       roomTime: gameTime,
       roomColor: gameColor,
+      elo: elo,
     };
     createRoom(roomVariables);
+  };
+
+  const createRoom = async (x) => {
+
+    try {
+      const { data } = await addRoom({
+        variables: { ...x },
+      });
+    } catch (err) {
+      if (err) throw err.message;
+      console.log(err.message);
+    }
   };
 
   const sGame = async (wallet2) => {
@@ -183,7 +179,15 @@ const HomeMenu = () => {
 
   const joinRoom = () => {
     const roomNumber = document.getElementById("roomnumber");
+
     var room = parseInt(roomNumber.value).toString();
+
+    if (room === "NaN") {
+      alert("Please enter a room number.");
+      setGame(2);
+      return;
+    }
+    console.log(room);
 
     var work = { roomNumber: room, wallet2: walletAddress };
     sGame(work);
@@ -212,7 +216,7 @@ const HomeMenu = () => {
         </div>
       </div>
       <div className="herofeature">
-        <Link to="/play" className="">
+        <Link to="/profile">
           <BsIcons.BsTwitter size={50} />
         </Link>
         <Link to="play" className="">
@@ -258,15 +262,17 @@ const HomeMenu = () => {
   }
   if (game === 3) {
     return (
-    
-        <PlayVsPlay
-          room={room}
-          socket={socket}
-          walletAddress={walletAddress}
-          gameColor={gameColor}
-          gameTime={gameTime}
-        />
-   
+      <PlayVsPlay
+        room={room}
+        socket={socket}
+        walletAddress={walletAddress}
+        gameColor={gameColor}
+        gameTime={gameTime}
+        elo={elo}
+        OpponentElo={wallet2Elo}
+        OpponentWallet={wallet2Address}
+        score= {score}
+      />
     );
   }
 };

@@ -17,11 +17,20 @@
   height: 80px;
   width: 600px;
   display: flex;
-  background-color: #060b26;
- justify-content: center;
- align-items: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
 
-  color: white;
+  color: black;
+}
+
+.walletElo {
+  display: flex;
+  align-items: center;
+flex-direction: column;
+  color: black;
 }
 
 .timer {
